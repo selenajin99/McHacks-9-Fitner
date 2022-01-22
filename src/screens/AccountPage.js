@@ -2,6 +2,9 @@ import React, {useEffect, useState} from 'react';
 import {View, Text, FlatList, Keyboard, StyleSheet} from 'react-native';
 import firestore, {firebase} from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import storage from '@react-native-firebase/storage';
 import {
   Autocomplete,
   AutocompleteItem,
@@ -145,181 +148,187 @@ const AccountPage = () => {
   );
   return (
     <>
-      <View
-        style={{
-          flex: 0,
-        }}>
-        <TouchableOpacity
+      <KeyboardAwareScrollView>
+        <View
           style={{
-            top: 30,
-            width: 100,
-            alignSelf: 'center',
-            height: 100,
+            flex: 1,
           }}>
-          <Avatar
+          <TouchableOpacity
+            onPress={() => {
+              launchImageLibrary().then(image => {
+                storage().ref(auth().currentUser.uid).putFile(image);
+              });
+            }}
             style={{
-              top: 5,
-              width: 90,
-              height: 90,
-            }}
-            source={{
-              uri: 'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png',
-            }}
-          />
-        </TouchableOpacity>
-      </View>
-      <View
-        style={{
-          flex: 1,
-          marginTop: 50,
-          alignSelf: 'center',
-          width: '90%',
-        }}>
-        <Tooltip
-          anchor={renderNameInput}
-          visible={nameTooltipVisible}
-          onBackdropPress={() => setNameTooltipVisible(false)}>
-          Must have a name
-        </Tooltip>
-        <Input
-          label={'Bio'}
-          value={bio}
-          onChangeText={setBio}
-          style={{marginVertical: '10%'}}
-          onSubmitEditing={newBio => {
-            firestore()
-              .collection('Users')
-              .doc(auth().currentUser.uid)
-              .update({bio: bio})
-              .then(res => {
-                console.log('done');
-              });
-          }}
-        />
-        <TouchableOpacity>
-          <Input
-            showSoftInputOnFocus={false}
-            keyboardType={null}
-            label={'Location'}
-            value={city}
-            onFocus={() => {
-              Keyboard.dismiss();
-              setMapVisible(true);
-            }}
-            editable={false}
-            focusable={false}
-          />
-        </TouchableOpacity>
-
-        <Select
-          value={displayValue}
-          style={{width: '100%', marginVertical: '10%'}}
-          label="Availability"
-          multiSelect={true}
-          selectedIndex={availability}
-          onSelect={index => {
-            setAvailability(index);
-            console.log(index);
-            let firestoreFormatted = {
-              Monday: [false, false, false],
-              Tuesday: [false, false, false],
-              Wednesday: [false, false, false],
-              Thursday: [false, false, false],
-              Friday: [false, false, false],
-              Saturday: [false, false, false],
-              Sunday: [false, false, false],
-            };
-            index.forEach(item => {
-              firestoreFormatted[days[item.section]][item.row] = true;
-            });
-
-            firestore()
-              .collection('Users')
-              .doc(auth().currentUser.uid)
-              .update({availability: firestoreFormatted})
-              .then(res => {
-                console.log('done');
-              });
+              top: 30,
+              width: 100,
+              alignSelf: 'center',
+              height: 100,
+            }}>
+            <Avatar
+              style={{
+                top: 5,
+                width: 90,
+                height: 90,
+              }}
+              source={{
+                uri: 'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png',
+              }}
+            />
+          </TouchableOpacity>
+        </View>
+        <View
+          style={{
+            flex: 1,
+            marginTop: 50,
+            alignSelf: 'center',
+            width: '90%',
           }}>
-          {TimesOfDay(days[0])}
-          {TimesOfDay(days[1])}
-          {TimesOfDay(days[2])}
-          {TimesOfDay(days[3])}
-          {TimesOfDay(days[4])}
-          {TimesOfDay(days[5])}
-          {TimesOfDay(days[6])}
-        </Select>
-
-        <Autocomplete
-          placeholder="Type activities in here..."
-          value={activityInput}
-          onSelect={index => {
-            setActivityInput(data[index].title);
-          }}
-          onSubmitEditing={() => {
-            let theActivity = false;
-            presetActivities.forEach(activity => {
-              if (
-                activity.title
-                  .toLowerCase()
-                  .startsWith(activityInput.toLowerCase()) &&
-                !activities.includes(activity.title)
-              ) {
-                theActivity = activity.title;
-              }
-            });
-
-            if (theActivity) {
-              let newActivities = [...activities, theActivity];
+          <Tooltip
+            anchor={renderNameInput}
+            visible={nameTooltipVisible}
+            onBackdropPress={() => setNameTooltipVisible(false)}>
+            Must have a name
+          </Tooltip>
+          <Input
+            label={'Bio'}
+            value={bio}
+            onChangeText={setBio}
+            style={{marginVertical: '10%'}}
+            onSubmitEditing={newBio => {
               firestore()
                 .collection('Users')
                 .doc(auth().currentUser.uid)
-                .update({activities: newActivities});
-              setActivies(newActivities);
-              setActivityInput('');
-              setData(
-                presetActivities.filter(item => {
-                  if (
-                    activities.includes(item.title) ||
-                    item.title.includes(theActivity)
-                  ) {
-                    return false;
-                  } else {
-                    return true;
-                  }
-                }),
-              );
-            }
-          }}
-          onChangeText={query => {
-            setActivityInput(query);
-            setData(presetActivities.filter(item => filter(item, query)));
-          }}>
-          {data.map(renderOption)}
-        </Autocomplete>
-        <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-          {activities.map((activity, index) => {
-            return (
-              <TouchableOpacity
-                onPress={() => {
-                  let newActivities = activities.filter(
-                    item => item != activity,
-                  );
-                  setActivies(newActivities);
-                  firestore()
-                    .collection('Users')
-                    .doc(auth().currentUser.uid)
-                    .update({activities: newActivities});
-                }}>
-                <Text style={styles.chip} key={index}>
-                  {activity} ❌
-                </Text>
-              </TouchableOpacity>
-            );
-          })}
-        </View>
-      </View>
+                .update({bio: bio})
+                .then(res => {
+                  console.log('done');
+                });
+            }}
+          />
+          <TouchableOpacity>
+            <Input
+              showSoftInputOnFocus={false}
+              keyboardType={null}
+              label={'Location'}
+              value={city}
+              onFocus={() => {
+                Keyboard.dismiss();
+                setMapVisible(true);
+              }}
+              editable={false}
+              focusable={false}
+            />
+          </TouchableOpacity>
 
+          <Select
+            value={displayValue}
+            style={{width: '100%', marginVertical: '10%'}}
+            label="Availability"
+            multiSelect={true}
+            selectedIndex={availability}
+            onSelect={index => {
+              setAvailability(index);
+              console.log(index);
+              let firestoreFormatted = {
+                Monday: [false, false, false],
+                Tuesday: [false, false, false],
+                Wednesday: [false, false, false],
+                Thursday: [false, false, false],
+                Friday: [false, false, false],
+                Saturday: [false, false, false],
+                Sunday: [false, false, false],
+              };
+              index.forEach(item => {
+                firestoreFormatted[days[item.section]][item.row] = true;
+              });
+
+              firestore()
+                .collection('Users')
+                .doc(auth().currentUser.uid)
+                .update({availability: firestoreFormatted})
+                .then(res => {
+                  console.log('done');
+                });
+            }}>
+            {TimesOfDay(days[0])}
+            {TimesOfDay(days[1])}
+            {TimesOfDay(days[2])}
+            {TimesOfDay(days[3])}
+            {TimesOfDay(days[4])}
+            {TimesOfDay(days[5])}
+            {TimesOfDay(days[6])}
+          </Select>
+
+          <Autocomplete
+            placeholder="Type activities in here..."
+            value={activityInput}
+            onSelect={index => {
+              setActivityInput(data[index].title);
+            }}
+            onSubmitEditing={() => {
+              let theActivity = false;
+              presetActivities.forEach(activity => {
+                if (
+                  activity.title
+                    .toLowerCase()
+                    .startsWith(activityInput.toLowerCase()) &&
+                  !activities.includes(activity.title)
+                ) {
+                  theActivity = activity.title;
+                }
+              });
+
+              if (theActivity) {
+                let newActivities = [...activities, theActivity];
+                firestore()
+                  .collection('Users')
+                  .doc(auth().currentUser.uid)
+                  .update({activities: newActivities});
+                setActivies(newActivities);
+                setActivityInput('');
+                setData(
+                  presetActivities.filter(item => {
+                    if (
+                      activities.includes(item.title) ||
+                      item.title.includes(theActivity)
+                    ) {
+                      return false;
+                    } else {
+                      return true;
+                    }
+                  }),
+                );
+              }
+            }}
+            onChangeText={query => {
+              setActivityInput(query);
+              setData(presetActivities.filter(item => filter(item, query)));
+            }}>
+            {data.map(renderOption)}
+          </Autocomplete>
+          <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+            {activities.map((activity, index) => {
+              return (
+                <TouchableOpacity
+                  onPress={() => {
+                    let newActivities = activities.filter(
+                      item => item != activity,
+                    );
+                    setActivies(newActivities);
+                    firestore()
+                      .collection('Users')
+                      .doc(auth().currentUser.uid)
+                      .update({activities: newActivities});
+                  }}>
+                  <Text style={styles.chip} key={index}>
+                    {activity} ❌
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+        </View>
+      </KeyboardAwareScrollView>
       <MapModal
         setCity={setCity}
         city={city}

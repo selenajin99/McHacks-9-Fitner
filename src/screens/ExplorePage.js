@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import firestore from '@react-native-firebase/firestore';
 import React, {useEffect, useState} from 'react';
 import {View, StyleSheet, FlatList} from 'react-native';
@@ -6,11 +7,9 @@ import auth from '@react-native-firebase/auth';
 import {Input} from '@ui-kitten/components';
 
 const ExplorePage = () => {
-  const [username, setUsername] = useState([]);
   const [value, setValue] = useState('');
   const [filteredusers, setFilteredusers] = useState([]);
   const users = firestore().collection('Users');
-  const chats = [];
 
   const getMatchedUsers = () => {
     firestore()
@@ -62,10 +61,11 @@ const ExplorePage = () => {
       <FlatList
         data={filteredusers}
         renderItem={item => {
-          return <ProfileCard name={item.item.Name} />;
+          return (
+            <ProfileCard name={item.item.Name} sports={item.item.activities} />
+          );
         }}
       />
-      <ProfileCard name={'Pussy Cat'} />
     </View>
   );
 };
