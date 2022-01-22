@@ -1,10 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text, FlatList, Keyboard, StyleSheet} from 'react-native';
 import firestore, {firebase} from '@react-native-firebase/firestore';
+import storage from '@react-native-firebase/storage';
 import auth from '@react-native-firebase/auth';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import storage from '@react-native-firebase/storage';
+
 import ImageResizer from 'react-native-image-resizer';
 import {
   Autocomplete,
@@ -24,7 +25,7 @@ import MapModal from '../components/MapModal';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 const baseUrl = 'https://maps.googleapis.com/maps/api/geocode/json?address=';
 
-const AccountPage = () => {
+const AccountPage = ({route, navigation}) => {
   useEffect(() => {
     firestore()
       .collection('Users')
@@ -45,9 +46,7 @@ const AccountPage = () => {
         setName(res.data().Name);
         setBio(res.data().bio);
         setCity(res.data().city);
-        if (res.data().imageUri) {
-          setProfileUri(res.data().imageUri);
-        }
+
         axios({
           method: 'get',
           url: `${baseUrl}${
@@ -117,9 +116,7 @@ const AccountPage = () => {
     'Saturday',
     'Sunday',
   ];
-  const [profileUri, setProfileUri] = useState(
-    'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png',
-  );
+
   const presetActivities = [
     {title: 'Soccer'},
     {title: 'Basketball'},
@@ -195,11 +192,12 @@ const AccountPage = () => {
                           .ref(imageName)
                           .getDownloadURL()
                           .then(url => {
-                            setProfileUri(url);
+                            route.params.setImageUri(url);
                             firestore()
                               .collection('Users')
                               .doc(auth().currentUser.uid)
                               .update({imageUri: url});
+                            navigation.pop();
                           });
                       })
                       .catch(e => console.log('uploading image error => ', e));
@@ -231,7 +229,7 @@ const AccountPage = () => {
                 height: 90,
               }}
               source={{
-                uri: profileUri,
+                uri: route.params.imageUri,
               }}
             />
           </TouchableOpacity>
