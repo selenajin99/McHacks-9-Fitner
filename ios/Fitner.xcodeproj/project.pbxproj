@@ -14,6 +14,7 @@
 		47E6B116C528DD3EFE7E847C /* libPods-Fitner-FitnerTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F9F435DC882B037724E665F1 /* libPods-Fitner-FitnerTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		A3525B50279BC68D00CB2BFA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A3525B4F279BC68D00CB2BFA /* GoogleService-Info.plist */; };
+		A3525B55279BE4C800CB2BFA /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3525B54279BE4C800CB2BFA /* MapKit.framework */; };
 		BE0BB4232AF5BD94DC11B373 /* libPods-Fitner.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FB123EF04AB277C2154B4FF /* libPods-Fitner.a */; };
 /* End PBXBuildFile section */
 
@@ -43,6 +44,8 @@
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Fitner/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		959C635DA266DECFAC60B1BB /* Pods-Fitner-FitnerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Fitner-FitnerTests.debug.xcconfig"; path = "Target Support Files/Pods-Fitner-FitnerTests/Pods-Fitner-FitnerTests.debug.xcconfig"; sourceTree = "<group>"; };
 		A3525B4F279BC68D00CB2BFA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		A3525B51279BE37300CB2BFA /* Fitner-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Fitner-Bridging-Header.h"; sourceTree = "<group>"; };
+		A3525B54279BE4C800CB2BFA /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		C36A1351C8ECCC032DCF046D /* Pods-Fitner-FitnerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Fitner-FitnerTests.release.xcconfig"; path = "Target Support Files/Pods-Fitner-FitnerTests/Pods-Fitner-FitnerTests.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F9F435DC882B037724E665F1 /* libPods-Fitner-FitnerTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Fitner-FitnerTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -61,6 +64,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A3525B55279BE4C800CB2BFA /* MapKit.framework in Frameworks */,
 				BE0BB4232AF5BD94DC11B373 /* libPods-Fitner.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -101,6 +105,7 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A3525B54279BE4C800CB2BFA /* MapKit.framework */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				7FB123EF04AB277C2154B4FF /* libPods-Fitner.a */,
 				F9F435DC882B037724E665F1 /* libPods-Fitner-FitnerTests.a */,
@@ -136,6 +141,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				67F5051083B4AECC83DE0AF2 /* Pods */,
+				A3525B51279BE37300CB2BFA /* Fitner-Bridging-Header.h */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -211,7 +217,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						LastSwiftMigration = 1120;
+						LastSwiftMigration = 1310;
 					};
 				};
 			};
@@ -515,6 +521,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = Fitner;
+				SWIFT_OBJC_BRIDGING_HEADER = "Fitner-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -540,6 +547,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = Fitner;
+				SWIFT_OBJC_BRIDGING_HEADER = "Fitner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
