@@ -227,7 +227,7 @@ const AccountPage = () => {
         </Select>
 
         <Autocomplete
-          placeholder="Place your Text"
+          placeholder="Type activities in here..."
           value={activityInput}
           onSelect={index => {
             setActivityInput(data[index].title);
@@ -255,13 +255,10 @@ const AccountPage = () => {
               setActivityInput('');
               setData(
                 presetActivities.filter(item => {
-                  console.log(item);
-                  console.log(activities);
                   if (
                     activities.includes(item.title) ||
-                    activities.includes(theActivity)
+                    item.title.includes(theActivity)
                   ) {
-                    console.log('false');
                     return false;
                   } else {
                     return true;
