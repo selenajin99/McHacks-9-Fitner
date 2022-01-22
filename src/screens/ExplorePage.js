@@ -10,6 +10,7 @@ const ExplorePage = () => {
   const [value, setValue] = useState('');
   const [filteredusers, setFilteredusers] = useState([]);
   const [currentUserSports, setCurrentUserSports] = useState([]);
+  const [currentUserTimes, setCurrentUserTimes] = useState([]);
   const getMatchedUsers = () => {
     firestore()
       .collection('Users')
@@ -19,6 +20,7 @@ const ExplorePage = () => {
         docs.forEach(doc => {
           if (auth().currentUser.uid === doc.ref.id) {
             setCurrentUserSports(doc._data.activities);
+            setCurrentUserTimes(doc._data.avalibilities);
           } else {
             tempUsers.push(doc._data);
           }
@@ -28,16 +30,25 @@ const ExplorePage = () => {
   };
 
   const isMatched = user => {
-    var matchedSports = [];
     // check matched sports
+    console.log(user.Name);
+    if (
+      user.activities &&
+      user.activities.some(item => currentUserSports.includes(item))
+    ) {
+      console.log(' MATHCED');
+      console.log(user.activities);
+      return true;
 
-    // check avalibility
-
-    return matchedSports;
+      // check avalibility
+    } else {
+      console.log('NOT MATHCED');
+      console.log(user.activities);
+      return false;
+    }
   };
 
   const search = nextValue => {
-    const bob = firestore();
     if (nextValue.length !== 0) {
       // TODO implement search for sports function
       firestore()
@@ -55,7 +66,6 @@ const ExplorePage = () => {
     } else {
       getMatchedUsers();
     }
-    return bob;
   };
 
   useEffect(() => {
@@ -78,12 +88,14 @@ const ExplorePage = () => {
         ListFooterComponent={() => {
           return <View style={{margin: '10%'}}></View>;
         }}
-        data={filteredusers}
+        data={filteredusers.filter(item => {
+          if (isMatched(item)) return true;
+          else return false;
+        })}
         renderItem={item => {
-          console.log('PERSON X');
-          console.log(item.item.activities);
           return (
             <ProfileCard
+              imageUri={item.item.imageUri}
               currSports={currentUserSports}
               name={item.item.Name}
               sports={item.item.activities}

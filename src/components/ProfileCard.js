@@ -29,12 +29,9 @@ const ProfileCard = props => {
             data={
               props.sports
                 ? props.sports.filter(item => {
-                    console.log('ALL SPORTS' + props.sports);
                     if (props.currSports.includes(item)) {
-                      console.log(props.currSports + ' HAS ' + item);
                       return true;
                     } else {
-                      console.log(props.currSports + ' does not have ' + item);
                       return false;
                     }
                   })
@@ -81,7 +78,7 @@ const ProfileCard = props => {
 const styles = StyleSheet.create({
   card: {
     marginHorizontal: 10,
-    marginTop: 1,
+    marginTop: 10,
     borderRadius: 15,
     height: 140,
     backgroundColor: 'white',
