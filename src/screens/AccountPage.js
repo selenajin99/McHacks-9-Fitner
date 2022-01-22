@@ -1,8 +1,10 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, FlatList, Keyboard} from 'react-native';
-import firestore from '@react-native-firebase/firestore';
+import {View, Text, FlatList, Keyboard, StyleSheet} from 'react-native';
+import firestore, {firebase} from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import {
+  Autocomplete,
+  AutocompleteItem,
   Button,
   IndexPath,
   Input,
@@ -108,6 +110,39 @@ const AccountPage = () => {
     'Saturday',
     'Sunday',
   ];
+  const presetActivities = [
+    {title: 'Soccer'},
+    {title: 'Basketball'},
+    {title: 'Baseball'},
+    {title: 'Cricket'},
+    {title: 'Squash'},
+    {title: 'Swimming'},
+    {title: 'Running'},
+    {title: 'Skating'},
+    {title: 'Badminton'},
+    {title: 'Tennis'},
+    {title: 'Curling'},
+    {title: 'Field Hockey'},
+    {title: 'Ice Hockey'},
+    {title: 'Beach Volleyball'},
+    {title: 'Volleyball'},
+    {title: 'American Football'},
+    {title: 'Skiing'},
+    {title: 'Snowboarding'},
+    {title: 'Table Tennis'},
+    {title: 'Walking'},
+    {title: 'Hiking'},
+    {title: 'Bowling'},
+    {title: 'Boxing'},
+  ];
+  const filter = (item, query) =>
+    item.title.toLowerCase().includes(query.toLowerCase());
+  const [activityInput, setActivityInput] = useState(null);
+  const [activities, setActivies] = useState([]);
+  const [data, setData] = useState(presetActivities);
+  const renderOption = (item, index) => (
+    <AutocompleteItem key={index} title={item.title} />
+  );
   return (
     <>
       <View
@@ -197,7 +232,7 @@ const AccountPage = () => {
             index.forEach(item => {
               firestoreFormatted[days[item.section]][item.row] = true;
             });
-            console.log(auth().currentUser.uid);
+
             firestore()
               .collection('Users')
               .doc(auth().currentUser.uid)
@@ -214,6 +249,75 @@ const AccountPage = () => {
           {TimesOfDay(days[5])}
           {TimesOfDay(days[6])}
         </Select>
+
+        <Autocomplete
+          placeholder="Type activities in here..."
+          value={activityInput}
+          onSelect={index => {
+            setActivityInput(data[index].title);
+          }}
+          onSubmitEditing={() => {
+            let theActivity = false;
+            presetActivities.forEach(activity => {
+              if (
+                activity.title
+                  .toLowerCase()
+                  .startsWith(activityInput.toLowerCase()) &&
+                !activities.includes(activity.title)
+              ) {
+                theActivity = activity.title;
+              }
+            });
+
+            if (theActivity) {
+              let newActivities = [...activities, theActivity];
+              firestore()
+                .collection('Users')
+                .doc(auth().currentUser.uid)
+                .update({activities: newActivities});
+              setActivies(newActivities);
+              setActivityInput('');
+              setData(
+                presetActivities.filter(item => {
+                  if (
+                    activities.includes(item.title) ||
+                    item.title.includes(theActivity)
+                  ) {
+                    return false;
+                  } else {
+                    return true;
+                  }
+                }),
+              );
+            }
+          }}
+          onChangeText={query => {
+            setActivityInput(query);
+            setData(presetActivities.filter(item => filter(item, query)));
+          }}>
+          {data.map(renderOption)}
+        </Autocomplete>
+        <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+          {activities.map((activity, index) => {
+            return (
+              <TouchableOpacity
+                onPress={() => {
+                  let newActivities = activities.filter(
+                    item => item != activity,
+                  );
+                  setActivies(newActivities);
+                  firestore()
+                    .collection('Users')
+                    .doc(auth().currentUser.uid)
+                    .update({activities: newActivities});
+                }}>
+                <Text style={styles.chip} key={index}>
+                  {activity} ❌
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
+        </View>
       </View>
 
       <MapModal
@@ -245,5 +349,29 @@ const AccountPage = () => {
     </>
   );
 };
+const styles = StyleSheet.create({
+  card: {
+    flexDirection: 'row',
+  },
+  profile: {
+    height: 120,
+    width: 120,
+  },
+  right: {
+    marginHorizontal: '5%',
+    marginVertical: '5%',
+  },
+  chip: {
+    borderRadius: 10,
+    borderColor: ' black',
+    borderWidth: 1,
+    textAlign: 'center',
+    paddingHorizontal: 15,
+    marginHorizontal: 5,
+  },
+  sports: {
+    flexDirection: 'row',
+  },
+});
 
 export default AccountPage;

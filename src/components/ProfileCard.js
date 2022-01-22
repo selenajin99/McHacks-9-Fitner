@@ -1,6 +1,6 @@
 import React from 'react';
 import {Card, Text, Avatar, Button} from '@ui-kitten/components';
-import {View, StyleSheet, Chip} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 
@@ -15,7 +15,7 @@ const ProfileCard = props => {
         <Avatar
           style={styles.profile}
           source={{
-            uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQBKRizGW6Md-BUD5MchQ_UWgYZVKwNQxoPzQte9r0fwSQzBV6h',
+            uri: 'https://i.pinimg.com/originals/b3/ff/3a/b3ff3accc46377d013a80eb9519c8c1c.jpg',
           }}
         />
         <View style={styles.right}>

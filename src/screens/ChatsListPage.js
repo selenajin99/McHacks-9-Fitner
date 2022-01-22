@@ -96,6 +96,7 @@ const ChatsListPage = ({navigation}) => {
                         );
                         doc.ref.update({members: newMember});
                         setVisible(false);
+                        setChatCode('');
                       });
                     });
                 }}>
