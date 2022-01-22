@@ -1,11 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import {View, Text, ScrollView} from 'react-native';
-import {createStackNavigator} from '@react-navigation/stack';
 import ChatLists from '../components/ChatLists';
 import firestore from '@react-native-firebase/firestore';
 
-const ChatsListPage = () => {
-  const Stack = createStackNavigator();
+const ChatsListPage = ({navigation}) => {
   const [chats, setChats] = useState([]);
 
   useEffect(() => {
@@ -20,7 +18,12 @@ const ChatsListPage = () => {
   return (
     <ScrollView>
       {chats.map(({id, data: {chatName}}) => (
-        <ChatLists key={id} id={id} chatName={chatName} />
+        <ChatLists
+          key={id}
+          id={id}
+          chatName={chatName}
+          navigation={navigation}
+        />
       ))}
     </ScrollView>
   );

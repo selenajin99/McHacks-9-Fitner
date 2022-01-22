@@ -48,12 +48,24 @@ const BottomTabBar = ({navigation, state}) => (
   </SafeAreaView>
 );
 
+const ChatListStack = () => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="home"
+        component={TabNavigator}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen name="ChatPage" component={ChatPage} />
+    </Stack.Navigator>
+  );
+};
+
 const TabNavigator = () => (
   <Navigator tabBar={props => <BottomTabBar {...props} />}>
     <Screen name="Explore" component={ExplorePage} />
-    <Screen name="Chats" component={ChatsListPage} />
+    <Stack.Screen name="ChatList" component={ChatsListPage} />
     <Screen name="Account" component={AccountPage} />
-    <Stack.Screen name="ChatPage" component={ChatPage} />
   </Navigator>
 );
 const App = () => {
@@ -83,7 +95,7 @@ const App = () => {
       <IconRegistry icons={EvaIconsPack} />
       <ApplicationProvider {...eva} theme={eva.light}>
         <NavigationContainer>
-          <TabNavigator />
+          <ChatListStack />
         </NavigationContainer>
       </ApplicationProvider>
     </>
