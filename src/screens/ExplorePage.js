@@ -7,11 +7,9 @@ import auth from '@react-native-firebase/auth';
 import {Input} from '@ui-kitten/components';
 
 const ExplorePage = () => {
-  const [username, setUsername] = useState([]);
   const [value, setValue] = useState('');
   const [filteredusers, setFilteredusers] = useState([]);
   const users = firestore().collection('Users');
-  const chats = [];
 
   const getMatchedUsers = () => {
     firestore()
