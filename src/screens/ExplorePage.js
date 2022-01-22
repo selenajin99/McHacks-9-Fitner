@@ -7,12 +7,9 @@ import auth from '@react-native-firebase/auth';
 import {Input} from '@ui-kitten/components';
 
 const ExplorePage = () => {
-  const [username, setUsername] = useState([]);
   const [value, setValue] = useState('');
   const [filteredusers, setFilteredusers] = useState([]);
-  const users = firestore().collection('Users');
-  const chats = [];
-
+  const [currentUserSports, setCurrentUserSports] = useState([]);
   const getMatchedUsers = () => {
     firestore()
       .collection('Users')
@@ -20,30 +17,49 @@ const ExplorePage = () => {
       .then(docs => {
         var tempUsers = [];
         docs.forEach(doc => {
-          tempUsers.push(doc._data);
+          if (auth().currentUser.uid === doc.ref.id) {
+            setCurrentUserSports(doc._data.activities);
+          } else {
+            tempUsers.push(doc._data);
+          }
         });
         setFilteredusers(tempUsers);
       });
   };
-  const search = () => {
+
+  const isMatched = user => {
+    var matchedSports = [];
+    // check matched sports
+
+    // check avalibility
+
+    return matchedSports;
+  };
+
+  const search = nextValue => {
     const bob = firestore();
-    users.where('Name', 'array-contains', value).onSnapshot(snapshot => {
-      setFilteredusers(
-        snapshot.docs.map(doc => ({id: doc.id, data: doc.data()})),
-      );
-    });
+    if (nextValue.length !== 0) {
+      // TODO implement search for sports function
+      firestore()
+        .collection('Users')
+        .where('Name', '>=', nextValue)
+        .where('Name', '<=', nextValue + '\uf8ff')
+        .get()
+        .then(docs => {
+          var tempUsers = [];
+          docs.forEach(doc => {
+            tempUsers.push(doc._data);
+          });
+          setFilteredusers(tempUsers);
+        });
+    } else {
+      getMatchedUsers();
+    }
     return bob;
   };
 
   useEffect(() => {
     getMatchedUsers();
-    //   firestore()
-    //     .collection('Users')
-    //     .doc(auth().currentUser.uid)
-    //     .get()
-    //     .then(doc => {
-    //       setUsername(doc.data().Name);
-    //     });
   }, []);
 
   return (
@@ -55,14 +71,24 @@ const ExplorePage = () => {
         value={value}
         onChangeText={nextValue => {
           setValue(nextValue);
-          search();
+          search(nextValue);
         }}
       />
       <FlatList
+        ListFooterComponent={() => {
+          return <View style={{margin: '10%'}}></View>;
+        }}
         data={filteredusers}
         renderItem={item => {
+          console.log('PERSON X');
+          console.log(item.item.activities);
           return (
-            <ProfileCard name={item.item.Name} sports={item.item.activities} />
+            <ProfileCard
+              currSports={currentUserSports}
+              name={item.item.Name}
+              sports={item.item.activities}
+              bio={item.item.bio}
+            />
           );
         }}
       />
