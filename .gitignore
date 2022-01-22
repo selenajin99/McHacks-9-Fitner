@@ -1,3 +1,14 @@
 
 .DS_Store
 node_modules/
+package-lock.json
+
+/template/ios/build/
+/template/ios/Pods/
+/template/ios/Podfile.lock
+/packages/rn-tester/Gemfile.lock
+android/
+android/.gradle/6.7/executionHistory/executionHistory.bin
+android/.gradle/6.7/executionHistory/executionHistory.lock
+android/.gradle/6.7/fileHashes/fileHashes.bin
+android/.gradle/6.7/fileHashes/fileHashes.lock

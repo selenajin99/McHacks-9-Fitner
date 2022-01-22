@@ -6,7 +6,14 @@ const ExplorePage = () => {
 	const [username, setUsername] = useState([])
 
 	useEffect(() => {
-		const bob = firestore().collection('Users').doc('tDywtpawk5ReOYza0Lpo').get()
+		//how to pull from firestore
+		const bob = firestore()
+			.collection('Users')
+			.doc('tDywtpawk5ReOYza0Lpo')
+			.get()
+			.then((bobb) => {
+				setUsername(bobb.data().Name)
+			})
 	}, [])
 
 	return (
