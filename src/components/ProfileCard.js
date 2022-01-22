@@ -1,6 +1,8 @@
 import React from 'react';
-import {Card, Text, Avatar} from '@ui-kitten/components';
+import {Card, Text, Avatar, Button} from '@ui-kitten/components';
 import {View, StyleSheet, Chip} from 'react-native';
+import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 
 const ProfileCard = props => {
   return (
@@ -22,6 +24,23 @@ const ProfileCard = props => {
             <Text style={styles.chip}>Soccer</Text>
             <Text style={styles.chip}>More</Text>
           </View>
+          <Button
+            onPress={() => {
+              firestore()
+                .collection('Chats')
+                .add({chatName: 'New group'})
+                .then(doc => {
+                  doc.update({
+                    chatCode: doc.id.substring(
+                      doc.id.length - 4,
+                      doc.id.length,
+                    ),
+                    members: [auth().currentUser.uid, 'tomsid'],
+                  });
+                });
+            }}>
+            Chat
+          </Button>
         </View>
       </View>
     </Card>

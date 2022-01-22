@@ -2,9 +2,7 @@ import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {Avatar, Button, ListItem, Divider} from '@ui-kitten/components';
 
-const ChatLists = ({id, chatName, enterChat, navigation}) => {
-  console.log(navigation);
-
+const ChatLists = ({id, chatName, navigation, chatCode}) => {
   const ItemImage = props => (
     <Avatar
       {...props}
@@ -12,6 +10,7 @@ const ChatLists = ({id, chatName, enterChat, navigation}) => {
       source={'../../assets/icon.png'}
     />
   );
+
   return (
     <View>
       <ListItem
@@ -20,7 +19,11 @@ const ChatLists = ({id, chatName, enterChat, navigation}) => {
         description={id}
         accessoryLeft={ItemImage}
         onPress={() =>
-          navigation.navigate('ChatPage', {id: id, chatName: chatName})
+          navigation.navigate('ChatPage', {
+            id,
+            chatName,
+            chatCode,
+          })
         }
       />
       <Divider />

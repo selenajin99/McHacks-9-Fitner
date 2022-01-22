@@ -12,11 +12,12 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
 } from 'react-native';
-import {Icon} from '@ui-kitten/components';
+import {Icon, Tooltip} from '@ui-kitten/components';
 import firestore, {firebase} from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 
 const ChatPage = ({navigation, route}) => {
+  console.log(route.params);
   const [input, setInput] = useState('');
   const [senderName, setSenderName] = useState('');
   const [messages, setMessages] = useState([]);
@@ -40,6 +41,11 @@ const ChatPage = ({navigation, route}) => {
           <Text>{route.params.chatName}</Text>
         </View>
       ),
+      headerRight: () => {
+        return (
+          <Text style={{fontSize: 10}}>Room code: {route.params.chatCode}</Text>
+        );
+      },
     });
   }, [navigation]);
 

@@ -1,15 +1,21 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, FlatList} from 'react-native';
+import {View, Text, FlatList, Keyboard} from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import {
   Button,
-  CheckBox,
   IndexPath,
+  Input,
   Select,
   SelectGroup,
   SelectItem,
+  Tooltip,
 } from '@ui-kitten/components';
+
+import axios from 'axios';
+import MapModal from '../components/MapModal';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+const baseUrl = 'https://maps.googleapis.com/maps/api/geocode/json?address=';
 
 const AccountPage = () => {
   useEffect(() => {
@@ -28,12 +34,60 @@ const AccountPage = () => {
             }
           }
         }
-        console.log(formattedAvail);
         setAvailability(formattedAvail);
+        setName(res.data().Name);
+        setBio(res.data().bio);
+        setCity(res.data().city);
+        axios({
+          method: 'get',
+          url: `${baseUrl}${
+            res.data().city
+          }&key=AIzaSyA1NFourwaEW-OiAYSl2QJ0y0umeahYgjw`,
+        }).then(coords => {
+          setRegion({
+            ...region,
+            latitude: coords.data.results[0].geometry.location.lat,
+            longitude: coords.data.results[0].geometry.location.lng,
+          });
+        });
       });
   }, []);
 
+  const renderNameInput = () => {
+    return (
+      <Input
+        label={'Name'}
+        onChangeText={setName}
+        value={Name}
+        onSubmitEditing={() => {
+          if (Name.length == 0) {
+            setNameTooltipVisible(true);
+          } else {
+            firestore()
+              .collection('Users')
+              .doc(auth().currentUser.uid)
+              .update({Name})
+              .then(res => {
+                console.log('done');
+              });
+          }
+        }}
+      />
+    );
+  };
+
+  const [Name, setName] = useState('');
+  const [bio, setBio] = useState('');
+  const [city, setCity] = useState('');
+  const [mapVisible, setMapVisible] = useState(false);
   const [availability, setAvailability] = useState([]);
+  const [nameTooltipVisible, setNameTooltipVisible] = useState(false);
+  const [region, setRegion] = useState({
+    latitudeDelta: 0.025,
+    longitudeDelta: 0.025,
+    latitude: 69,
+    longitude: -73.5673,
+  });
   const TimesOfDay = day => {
     return (
       <SelectGroup title={day}>
@@ -55,11 +109,52 @@ const AccountPage = () => {
   ];
   return (
     <>
-      <View style={{alignSelf: 'center', width: '100%'}}>
-        <Text></Text>
+      <View
+        style={{
+          alignSelf: 'center',
+          width: '90%',
+          justifyContent: 'center',
+          height: '100%',
+        }}>
+        <Tooltip
+          anchor={renderNameInput}
+          visible={nameTooltipVisible}
+          onBackdropPress={() => setNameTooltipVisible(false)}>
+          Must have a name
+        </Tooltip>
+        <Input
+          label={'Bio'}
+          value={bio}
+          onChangeText={setBio}
+          style={{marginVertical: '10%'}}
+          onSubmitEditing={newBio => {
+            firestore()
+              .collection('Users')
+              .doc(auth().currentUser.uid)
+              .update({bio: bio})
+              .then(res => {
+                console.log('done');
+              });
+          }}
+        />
+        <TouchableOpacity>
+          <Input
+            showSoftInputOnFocus={false}
+            keyboardType={null}
+            label={'Location'}
+            value={city}
+            onFocus={() => {
+              Keyboard.dismiss();
+              setMapVisible(true);
+            }}
+            editable={false}
+            focusable={false}
+          />
+        </TouchableOpacity>
+
         <Select
           value={displayValue}
-          style={{width: '100%'}}
+          style={{width: '100%', marginVertical: '10%'}}
           label="Availability"
           multiSelect={true}
           selectedIndex={availability}
@@ -96,9 +191,28 @@ const AccountPage = () => {
           {TimesOfDay(days[6])}
         </Select>
       </View>
+
+      <MapModal
+        setCity={setCity}
+        city={city}
+        mapVisible={mapVisible}
+        setMapVisible={setMapVisible}
+        region={region}
+        setRegion={setRegion}
+        dismissButtonFunction={() => {
+          firestore()
+            .collection('Users')
+            .doc(auth().currentUser.uid)
+            .update({city: city})
+            .then(res => {
+              setMapVisible(false);
+              console.log('done');
+            });
+        }}
+      />
       <Button
         status={'danger'}
-        style={{}}
+        style={{position: 'absolute', alignSelf: 'center', bottom: 10}}
         onPress={() => {
           auth().signOut();
         }}>
