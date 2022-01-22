@@ -1,12 +1,19 @@
-import React from 'react';
-import {View, Text} from 'react-native';
+import firestore from '@react-native-firebase/firestore'
+import React, { useEffect, useState } from 'react'
+import { View, Text } from 'react-native'
 
 const ExplorePage = () => {
-  return (
-    <View>
-      <Text></Text>
-    </View>
-  );
-};
+	const [username, setUsername] = useState([])
 
-export default ExplorePage;
+	useEffect(() => {
+		const bob = firestore().collection('Users').doc('tDywtpawk5ReOYza0Lpo').get()
+	}, [])
+
+	return (
+		<View>
+			<Text>{username}</Text>
+		</View>
+	)
+}
+
+export default ExplorePage

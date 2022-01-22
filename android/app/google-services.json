@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "72901818940",
+    "project_id": "fitner-199d4",
+    "storage_bucket": "fitner-199d4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:72901818940:android:16f8d986657b7a14b06139",
+        "android_client_info": {
+          "package_name": "com.fitner"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "72901818940-40i1rr7g352ts9eq143e0re1svlvl6pm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBUiGg_Y5H6DcJXNaGqK3T3eRzlZ55oBM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "72901818940-40i1rr7g352ts9eq143e0re1svlvl6pm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

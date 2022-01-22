@@ -4,7 +4,7 @@
             "outputFile": "/Users/saagararya/Documents/Projects/Fitner/android/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-v24/values-v24.xml",
             "map": [
                 {
-                    "source": "/Users/saagararya/.gradle/caches/transforms-2/files-2.1/93e99cc524f9e4f775937ead40ad032e/appcompat-1.2.0/res/values-v24/values-v24.xml",
+                    "source": "/Users/saagararya/.gradle/caches/transforms-2/files-2.1/049b4a729439b1982390551f058da79f/appcompat-1.2.0/res/values-v24/values-v24.xml",
                     "from": {
                         "startLines": "2,3",
                         "startColumns": "4,4",

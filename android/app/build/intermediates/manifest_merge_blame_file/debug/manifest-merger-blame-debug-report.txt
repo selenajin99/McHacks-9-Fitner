@@ -14,55 +14,153 @@
 12    <uses-permission android:name="android.permission.INTERNET" />
 12-->/Users/saagararya/Documents/Projects/Fitner/android/app/src/main/AndroidManifest.xml:4:5-67
 12-->/Users/saagararya/Documents/Projects/Fitner/android/app/src/main/AndroidManifest.xml:4:22-64
-13    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-13-->[com.facebook.flipper:flipper:0.75.1] /Users/saagararya/.gradle/caches/transforms-2/files-2.1/a8f6015f96666ab8d93bfe5b64998bc8/jetified-flipper-0.75.1/AndroidManifest.xml:16:5-76
-13-->[com.facebook.flipper:flipper:0.75.1] /Users/saagararya/.gradle/caches/transforms-2/files-2.1/a8f6015f96666ab8d93bfe5b64998bc8/jetified-flipper-0.75.1/AndroidManifest.xml:16:22-73
-14
-15    <application
-15-->/Users/saagararya/Documents/Projects/Fitner/android/app/src/main/AndroidManifest.xml:6:5-24:19
-16        android:name="com.fitner.MainApplication"
-16-->/Users/saagararya/Documents/Projects/Fitner/android/app/src/main/AndroidManifest.xml:7:7-38
-17        android:allowBackup="false"
-17-->/Users/saagararya/Documents/Projects/Fitner/android/app/src/main/AndroidManifest.xml:11:7-34
-18        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
-18-->[androidx.core:core:1.6.0] /Users/saagararya/.gradle/caches/transforms-2/files-2.1/67ff0aaf930f65024e6c37d99bc9e852/core-1.6.0/AndroidManifest.xml:24:18-86
-19        android:debuggable="true"
-20        android:icon="@mipmap/ic_launcher"
-20-->/Users/saagararya/Documents/Projects/Fitner/android/app/src/main/AndroidManifest.xml:9:7-41
-21        android:label="@string/app_name"
-21-->/Users/saagararya/Documents/Projects/Fitner/android/app/src/main/AndroidManifest.xml:8:7-39
-22        android:roundIcon="@mipmap/ic_launcher_round"
-22-->/Users/saagararya/Documents/Projects/Fitner/android/app/src/main/AndroidManifest.xml:10:7-52
-23        android:theme="@style/AppTheme"
-23-->/Users/saagararya/Documents/Projects/Fitner/android/app/src/main/AndroidManifest.xml:12:7-38
-24        android:usesCleartextTraffic="true" >
-24-->/Users/saagararya/Documents/Projects/Fitner/android/app/src/debug/AndroidManifest.xml:8:9-44
-25        <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
-25-->/Users/saagararya/Documents/Projects/Fitner/android/app/src/debug/AndroidManifest.xml:11:9-86
-25-->/Users/saagararya/Documents/Projects/Fitner/android/app/src/debug/AndroidManifest.xml:11:19-83
-26        <activity
-26-->/Users/saagararya/Documents/Projects/Fitner/android/app/src/main/AndroidManifest.xml:13:7-23:18
-27            android:name="com.fitner.MainActivity"
-27-->/Users/saagararya/Documents/Projects/Fitner/android/app/src/main/AndroidManifest.xml:14:9-37
-28            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
-28-->/Users/saagararya/Documents/Projects/Fitner/android/app/src/main/AndroidManifest.xml:16:9-86
-29            android:label="@string/app_name"
-29-->/Users/saagararya/Documents/Projects/Fitner/android/app/src/main/AndroidManifest.xml:15:9-41
-30            android:launchMode="singleTask"
-30-->/Users/saagararya/Documents/Projects/Fitner/android/app/src/main/AndroidManifest.xml:17:9-40
-31            android:windowSoftInputMode="adjustResize" >
-31-->/Users/saagararya/Documents/Projects/Fitner/android/app/src/main/AndroidManifest.xml:18:9-51
-32            <intent-filter>
-32-->/Users/saagararya/Documents/Projects/Fitner/android/app/src/main/AndroidManifest.xml:19:9-22:25
-33                <action android:name="android.intent.action.MAIN" />
-33-->/Users/saagararya/Documents/Projects/Fitner/android/app/src/main/AndroidManifest.xml:20:13-65
-33-->/Users/saagararya/Documents/Projects/Fitner/android/app/src/main/AndroidManifest.xml:20:21-62
-34
-35                <category android:name="android.intent.category.LAUNCHER" />
-35-->/Users/saagararya/Documents/Projects/Fitner/android/app/src/main/AndroidManifest.xml:21:13-73
-35-->/Users/saagararya/Documents/Projects/Fitner/android/app/src/main/AndroidManifest.xml:21:23-70
-36            </intent-filter>
-37        </activity>
-38    </application>
-39
-40</manifest>
+13    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" /> <!-- Although the *SdkVersion is captured in gradle build files, this is required for non gradle builds -->
+13-->[com.facebook.flipper:flipper:0.75.1] /Users/saagararya/.gradle/caches/transforms-2/files-2.1/ce1147b3e4e04fe87f556bced63a10fa/jetified-flipper-0.75.1/AndroidManifest.xml:16:5-76
+13-->[com.facebook.flipper:flipper:0.75.1] /Users/saagararya/.gradle/caches/transforms-2/files-2.1/ce1147b3e4e04fe87f556bced63a10fa/jetified-flipper-0.75.1/AndroidManifest.xml:16:22-73
+14    <!-- <uses-sdk android:minSdkVersion="14" /> -->
+15    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+15-->[com.google.firebase:firebase-firestore:24.0.0] /Users/saagararya/.gradle/caches/transforms-2/files-2.1/f27fe8cfca89657d66d5b1bfc13441ee/jetified-firebase-firestore-24.0.0/AndroidManifest.xml:13:5-79
+15-->[com.google.firebase:firebase-firestore:24.0.0] /Users/saagararya/.gradle/caches/transforms-2/files-2.1/f27fe8cfca89657d66d5b1bfc13441ee/jetified-firebase-firestore-24.0.0/AndroidManifest.xml:13:22-76
+16
+17    <application
+17-->/Users/saagararya/Documents/Projects/Fitner/android/app/src/main/AndroidManifest.xml:6:5-24:19
+18        android:name="com.fitner.MainApplication"
+18-->/Users/saagararya/Documents/Projects/Fitner/android/app/src/main/AndroidManifest.xml:7:7-38
+19        android:allowBackup="false"
+19-->/Users/saagararya/Documents/Projects/Fitner/android/app/src/main/AndroidManifest.xml:11:7-34
+20        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+20-->[androidx.core:core:1.6.0] /Users/saagararya/.gradle/caches/transforms-2/files-2.1/264d9551c65e454ca4a13f554e4afe35/core-1.6.0/AndroidManifest.xml:24:18-86
+21        android:debuggable="true"
+22        android:icon="@mipmap/ic_launcher"
+22-->/Users/saagararya/Documents/Projects/Fitner/android/app/src/main/AndroidManifest.xml:9:7-41
+23        android:label="@string/app_name"
+23-->/Users/saagararya/Documents/Projects/Fitner/android/app/src/main/AndroidManifest.xml:8:7-39
+24        android:roundIcon="@mipmap/ic_launcher_round"
+24-->/Users/saagararya/Documents/Projects/Fitner/android/app/src/main/AndroidManifest.xml:10:7-52
+25        android:theme="@style/AppTheme"
+25-->/Users/saagararya/Documents/Projects/Fitner/android/app/src/main/AndroidManifest.xml:12:7-38
+26        android:usesCleartextTraffic="true" >
+26-->/Users/saagararya/Documents/Projects/Fitner/android/app/src/debug/AndroidManifest.xml:8:9-44
+27        <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
+27-->/Users/saagararya/Documents/Projects/Fitner/android/app/src/debug/AndroidManifest.xml:11:9-86
+27-->/Users/saagararya/Documents/Projects/Fitner/android/app/src/debug/AndroidManifest.xml:11:19-83
+28        <activity
+28-->/Users/saagararya/Documents/Projects/Fitner/android/app/src/main/AndroidManifest.xml:13:7-23:18
+29            android:name="com.fitner.MainActivity"
+29-->/Users/saagararya/Documents/Projects/Fitner/android/app/src/main/AndroidManifest.xml:14:9-37
+30            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
+30-->/Users/saagararya/Documents/Projects/Fitner/android/app/src/main/AndroidManifest.xml:16:9-86
+31            android:label="@string/app_name"
+31-->/Users/saagararya/Documents/Projects/Fitner/android/app/src/main/AndroidManifest.xml:15:9-41
+32            android:launchMode="singleTask"
+32-->/Users/saagararya/Documents/Projects/Fitner/android/app/src/main/AndroidManifest.xml:17:9-40
+33            android:windowSoftInputMode="adjustResize" >
+33-->/Users/saagararya/Documents/Projects/Fitner/android/app/src/main/AndroidManifest.xml:18:9-51
+34            <intent-filter>
+34-->/Users/saagararya/Documents/Projects/Fitner/android/app/src/main/AndroidManifest.xml:19:9-22:25
+35                <action android:name="android.intent.action.MAIN" />
+35-->/Users/saagararya/Documents/Projects/Fitner/android/app/src/main/AndroidManifest.xml:20:13-65
+35-->/Users/saagararya/Documents/Projects/Fitner/android/app/src/main/AndroidManifest.xml:20:21-62
+36
+37                <category android:name="android.intent.category.LAUNCHER" />
+37-->/Users/saagararya/Documents/Projects/Fitner/android/app/src/main/AndroidManifest.xml:21:13-73
+37-->/Users/saagararya/Documents/Projects/Fitner/android/app/src/main/AndroidManifest.xml:21:23-70
+38            </intent-filter>
+39        </activity>
+40
+41        <meta-data
+41-->[:react-native-firebase_app] /Users/saagararya/Documents/Projects/Fitner/node_modules/@react-native-firebase/app/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:12:9-14:36
+42            android:name="app_data_collection_default_enabled"
+42-->[:react-native-firebase_app] /Users/saagararya/Documents/Projects/Fitner/node_modules/@react-native-firebase/app/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:13:13-63
+43            android:value="true" />
+43-->[:react-native-firebase_app] /Users/saagararya/Documents/Projects/Fitner/node_modules/@react-native-firebase/app/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:14:13-33
+44
+45        <service
+45-->[:react-native-firebase_app] /Users/saagararya/Documents/Projects/Fitner/node_modules/@react-native-firebase/app/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:16:9-20:19
+46            android:name="com.google.firebase.components.ComponentDiscoveryService"
+46-->[:react-native-firebase_app] /Users/saagararya/Documents/Projects/Fitner/node_modules/@react-native-firebase/app/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:16:18-89
+47            android:directBootAware="true"
+47-->[com.google.firebase:firebase-common:20.0.0] /Users/saagararya/.gradle/caches/transforms-2/files-2.1/cf44503f512bd01edbb9a42565c54f02/jetified-firebase-common-20.0.0/AndroidManifest.xml:35:13-43
+48            android:exported="false" >
+48-->[com.google.firebase:firebase-firestore:24.0.0] /Users/saagararya/.gradle/caches/transforms-2/files-2.1/f27fe8cfca89657d66d5b1bfc13441ee/jetified-firebase-firestore-24.0.0/AndroidManifest.xml:19:13-37
+49            <meta-data
+49-->[:react-native-firebase_app] /Users/saagararya/Documents/Projects/Fitner/node_modules/@react-native-firebase/app/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:17:13-19:85
+50                android:name="com.google.firebase.components:io.invertase.firebase.app.ReactNativeFirebaseAppRegistrar"
+50-->[:react-native-firebase_app] /Users/saagararya/Documents/Projects/Fitner/node_modules/@react-native-firebase/app/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:18:17-120
+51                android:value="com.google.firebase.components.ComponentRegistrar" />
+51-->[:react-native-firebase_app] /Users/saagararya/Documents/Projects/Fitner/node_modules/@react-native-firebase/app/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:19:17-82
+52            <meta-data
+52-->[com.google.firebase:firebase-firestore:24.0.0] /Users/saagararya/.gradle/caches/transforms-2/files-2.1/f27fe8cfca89657d66d5b1bfc13441ee/jetified-firebase-firestore-24.0.0/AndroidManifest.xml:20:13-22:85
+53                android:name="com.google.firebase.components:com.google.firebase.firestore.FirestoreRegistrar"
+53-->[com.google.firebase:firebase-firestore:24.0.0] /Users/saagararya/.gradle/caches/transforms-2/files-2.1/f27fe8cfca89657d66d5b1bfc13441ee/jetified-firebase-firestore-24.0.0/AndroidManifest.xml:21:17-111
+54                android:value="com.google.firebase.components.ComponentRegistrar" />
+54-->[com.google.firebase:firebase-firestore:24.0.0] /Users/saagararya/.gradle/caches/transforms-2/files-2.1/f27fe8cfca89657d66d5b1bfc13441ee/jetified-firebase-firestore-24.0.0/AndroidManifest.xml:22:17-82
+55        </service>
+56
+57        <provider
+57-->[:react-native-firebase_app] /Users/saagararya/Documents/Projects/Fitner/node_modules/@react-native-firebase/app/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:22:9-26:38
+58            android:name="io.invertase.firebase.app.ReactNativeFirebaseAppInitProvider"
+58-->[:react-native-firebase_app] /Users/saagararya/Documents/Projects/Fitner/node_modules/@react-native-firebase/app/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:23:13-88
+59            android:authorities="com.fitner.reactnativefirebaseappinitprovider"
+59-->[:react-native-firebase_app] /Users/saagararya/Documents/Projects/Fitner/node_modules/@react-native-firebase/app/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:24:13-86
+60            android:exported="false"
+60-->[:react-native-firebase_app] /Users/saagararya/Documents/Projects/Fitner/node_modules/@react-native-firebase/app/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:25:13-37
+61            android:initOrder="99" />
+61-->[:react-native-firebase_app] /Users/saagararya/Documents/Projects/Fitner/node_modules/@react-native-firebase/app/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:26:13-35
+62
+63        <activity
+63-->[com.google.android.gms:play-services-auth:20.0.0] /Users/saagararya/.gradle/caches/transforms-2/files-2.1/5e28fea1c2ebd4fee7c9c3bf029b2488/jetified-play-services-auth-20.0.0/AndroidManifest.xml:23:9-27:75
+64            android:name="com.google.android.gms.auth.api.signin.internal.SignInHubActivity"
+64-->[com.google.android.gms:play-services-auth:20.0.0] /Users/saagararya/.gradle/caches/transforms-2/files-2.1/5e28fea1c2ebd4fee7c9c3bf029b2488/jetified-play-services-auth-20.0.0/AndroidManifest.xml:24:13-93
+65            android:excludeFromRecents="true"
+65-->[com.google.android.gms:play-services-auth:20.0.0] /Users/saagararya/.gradle/caches/transforms-2/files-2.1/5e28fea1c2ebd4fee7c9c3bf029b2488/jetified-play-services-auth-20.0.0/AndroidManifest.xml:25:13-46
+66            android:exported="false"
+66-->[com.google.android.gms:play-services-auth:20.0.0] /Users/saagararya/.gradle/caches/transforms-2/files-2.1/5e28fea1c2ebd4fee7c9c3bf029b2488/jetified-play-services-auth-20.0.0/AndroidManifest.xml:26:13-37
+67            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+67-->[com.google.android.gms:play-services-auth:20.0.0] /Users/saagararya/.gradle/caches/transforms-2/files-2.1/5e28fea1c2ebd4fee7c9c3bf029b2488/jetified-play-services-auth-20.0.0/AndroidManifest.xml:27:13-72
+68        <!--
+69            Service handling Google Sign-In user revocation. For apps that do not integrate with
+70            Google Sign-In, this service will never be started.
+71        -->
+72        <service
+72-->[com.google.android.gms:play-services-auth:20.0.0] /Users/saagararya/.gradle/caches/transforms-2/files-2.1/5e28fea1c2ebd4fee7c9c3bf029b2488/jetified-play-services-auth-20.0.0/AndroidManifest.xml:33:9-37:51
+73            android:name="com.google.android.gms.auth.api.signin.RevocationBoundService"
+73-->[com.google.android.gms:play-services-auth:20.0.0] /Users/saagararya/.gradle/caches/transforms-2/files-2.1/5e28fea1c2ebd4fee7c9c3bf029b2488/jetified-play-services-auth-20.0.0/AndroidManifest.xml:34:13-89
+74            android:exported="true"
+74-->[com.google.android.gms:play-services-auth:20.0.0] /Users/saagararya/.gradle/caches/transforms-2/files-2.1/5e28fea1c2ebd4fee7c9c3bf029b2488/jetified-play-services-auth-20.0.0/AndroidManifest.xml:35:13-36
+75            android:permission="com.google.android.gms.auth.api.signin.permission.REVOCATION_NOTIFICATION"
+75-->[com.google.android.gms:play-services-auth:20.0.0] /Users/saagararya/.gradle/caches/transforms-2/files-2.1/5e28fea1c2ebd4fee7c9c3bf029b2488/jetified-play-services-auth-20.0.0/AndroidManifest.xml:36:13-107
+76            android:visibleToInstantApps="true" />
+76-->[com.google.android.gms:play-services-auth:20.0.0] /Users/saagararya/.gradle/caches/transforms-2/files-2.1/5e28fea1c2ebd4fee7c9c3bf029b2488/jetified-play-services-auth-20.0.0/AndroidManifest.xml:37:13-48
+77
+78        <activity
+78-->[com.google.android.gms:play-services-base:18.0.0] /Users/saagararya/.gradle/caches/transforms-2/files-2.1/380f6f2b21c69a62d5821acedbbed160/jetified-play-services-base-18.0.0/AndroidManifest.xml:20:9-22:45
+79            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+79-->[com.google.android.gms:play-services-base:18.0.0] /Users/saagararya/.gradle/caches/transforms-2/files-2.1/380f6f2b21c69a62d5821acedbbed160/jetified-play-services-base-18.0.0/AndroidManifest.xml:20:19-85
+80            android:exported="false"
+80-->[com.google.android.gms:play-services-base:18.0.0] /Users/saagararya/.gradle/caches/transforms-2/files-2.1/380f6f2b21c69a62d5821acedbbed160/jetified-play-services-base-18.0.0/AndroidManifest.xml:22:19-43
+81            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+81-->[com.google.android.gms:play-services-base:18.0.0] /Users/saagararya/.gradle/caches/transforms-2/files-2.1/380f6f2b21c69a62d5821acedbbed160/jetified-play-services-base-18.0.0/AndroidManifest.xml:21:19-78
+82
+83        <provider
+83-->[com.google.firebase:firebase-common:20.0.0] /Users/saagararya/.gradle/caches/transforms-2/files-2.1/cf44503f512bd01edbb9a42565c54f02/jetified-firebase-common-20.0.0/AndroidManifest.xml:26:9-31:39
+84            android:name="com.google.firebase.provider.FirebaseInitProvider"
+84-->[com.google.firebase:firebase-common:20.0.0] /Users/saagararya/.gradle/caches/transforms-2/files-2.1/cf44503f512bd01edbb9a42565c54f02/jetified-firebase-common-20.0.0/AndroidManifest.xml:27:13-77
+85            android:authorities="com.fitner.firebaseinitprovider"
+85-->[com.google.firebase:firebase-common:20.0.0] /Users/saagararya/.gradle/caches/transforms-2/files-2.1/cf44503f512bd01edbb9a42565c54f02/jetified-firebase-common-20.0.0/AndroidManifest.xml:28:13-72
+86            android:directBootAware="true"
+86-->[com.google.firebase:firebase-common:20.0.0] /Users/saagararya/.gradle/caches/transforms-2/files-2.1/cf44503f512bd01edbb9a42565c54f02/jetified-firebase-common-20.0.0/AndroidManifest.xml:29:13-43
+87            android:exported="false"
+87-->[com.google.firebase:firebase-common:20.0.0] /Users/saagararya/.gradle/caches/transforms-2/files-2.1/cf44503f512bd01edbb9a42565c54f02/jetified-firebase-common-20.0.0/AndroidManifest.xml:30:13-37
+88            android:initOrder="100" />
+88-->[com.google.firebase:firebase-common:20.0.0] /Users/saagararya/.gradle/caches/transforms-2/files-2.1/cf44503f512bd01edbb9a42565c54f02/jetified-firebase-common-20.0.0/AndroidManifest.xml:31:13-36
+89
+90        <meta-data
+90-->[com.google.android.gms:play-services-basement:18.0.0] /Users/saagararya/.gradle/caches/transforms-2/files-2.1/0a6ac35ef17eb6546ba1fdb2976715b2/jetified-play-services-basement-18.0.0/AndroidManifest.xml:21:9-23:69
+91            android:name="com.google.android.gms.version"
+91-->[com.google.android.gms:play-services-basement:18.0.0] /Users/saagararya/.gradle/caches/transforms-2/files-2.1/0a6ac35ef17eb6546ba1fdb2976715b2/jetified-play-services-basement-18.0.0/AndroidManifest.xml:22:13-58
+92            android:value="@integer/google_play_services_version" />
+92-->[com.google.android.gms:play-services-basement:18.0.0] /Users/saagararya/.gradle/caches/transforms-2/files-2.1/0a6ac35ef17eb6546ba1fdb2976715b2/jetified-play-services-basement-18.0.0/AndroidManifest.xml:23:13-66
+93    </application>
+94
+95</manifest>
