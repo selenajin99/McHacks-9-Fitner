@@ -3,8 +3,10 @@ import {Card, Text, Avatar, Button} from '@ui-kitten/components';
 import {View, StyleSheet} from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
+import {FlatList} from 'react-native-gesture-handler';
 
 const ProfileCard = props => {
+  console.log(props.sports);
   return (
     <Card
       style={{
@@ -20,10 +22,15 @@ const ProfileCard = props => {
         />
         <View style={styles.right}>
           <Text style={{fontSize: 30, marginBottom: 10}}>{props.name}</Text>
-          <View style={styles.sports}>
-            <Text style={styles.chip}>Soccer</Text>
-            <Text style={styles.chip}>More</Text>
-          </View>
+          <FlatList
+            style={{height: 30}}
+            horizontal={true}
+            data={props.sports}
+            renderItem={item => {
+              console.log(item.item);
+              return <Text style={styles.chip}>{item.item}</Text>;
+            }}
+          />
           <Button
             onPress={() => {
               firestore()
@@ -62,11 +69,12 @@ const styles = StyleSheet.create({
   },
   chip: {
     borderRadius: 10,
-    borderColor: ' black',
+    borderColor: 'black',
     borderWidth: 1,
     textAlign: 'center',
     paddingHorizontal: 15,
     marginHorizontal: 5,
+    marginVertical: 5,
   },
   sports: {
     flexDirection: 'row',

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import firestore from '@react-native-firebase/firestore';
 import React, {useEffect, useState} from 'react';
 import {View, StyleSheet, FlatList} from 'react-native';
@@ -43,9 +44,7 @@ const ExplorePage = () => {
     //     .then(doc => {
     //       setUsername(doc.data().Name);
     //     });
-    console.log('filtered shitt');
-    console.log(filteredusers);
-  });
+  }, []);
 
   return (
     <View>
@@ -62,10 +61,11 @@ const ExplorePage = () => {
       <FlatList
         data={filteredusers}
         renderItem={item => {
-          return <ProfileCard name={item.item.Name} />;
+          return (
+            <ProfileCard name={item.item.Name} sports={item.item.activities} />
+          );
         }}
       />
-      <ProfileCard name={'Pussy Cat'} />
     </View>
   );
 };
