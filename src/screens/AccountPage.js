@@ -1,113 +1,110 @@
-import React, {useState} from 'react';
-import {View, Text} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {View, Text, FlatList} from 'react-native';
 import firestore from '@react-native-firebase/firestore';
-import {CheckBox} from '@ui-kitten/components';
-
-const DayCheckboxes = ({day, setDay}) => {
-  return (
-    <>
-      <CheckBox
-        checked={day.morning && day.afternoon && day.evening}
-        indeterminate={
-          (day.morning || day.afternoon || day.evening) &&
-          !(day.morning && day.afternoon && day.evening)
-        }
-        onChange={() => {
-          if (day.morning || day.afternoon || day.evening) {
-            setDay({
-              morning: false,
-              afternoon: false,
-              evening: false,
-              name: day.name,
-            });
-          } else {
-            setDay({
-              morning: true,
-              afternoon: true,
-              evening: true,
-              name: day.name,
-            });
-          }
-        }}>
-        {day.name}
-      </CheckBox>
-      <View style={{marginLeft: 25}}>
-        <CheckBox
-          checked={day.morning}
-          onChange={() => {
-            setDay({...day, morning: !day.morning});
-          }}>
-          Morning
-        </CheckBox>
-        <CheckBox
-          checked={day.afternoon}
-          onChange={() => {
-            setDay({...day, afternoon: !day.afternoon});
-          }}>
-          Afternoon
-        </CheckBox>
-        <CheckBox
-          checked={day.evening}
-          onChange={() => {
-            setDay({...day, evening: !day.evening});
-          }}>
-          Evening
-        </CheckBox>
-      </View>
-    </>
-  );
-};
+import auth from '@react-native-firebase/auth';
+import {
+  Button,
+  CheckBox,
+  IndexPath,
+  Select,
+  SelectGroup,
+  SelectItem,
+} from '@ui-kitten/components';
 
 const AccountPage = () => {
-  const [monday, setMonday] = useState({
-    name: 'Monday',
-    morning: false,
-    afternoon: false,
-    evening: false,
-  });
-  const [tuesday, setTuesday] = useState({
-    name: 'Tuesday',
-    morning: false,
-    afternoon: false,
-    evening: false,
-  });
-  const [wednesday, setWednesday] = useState({
-    name: 'Wednesday',
-    morning: false,
-    afternoon: false,
-    evening: false,
-  });
-  const [thursday, setThursday] = useState({
-    name: 'Thursday',
-    morning: false,
-    afternoon: false,
-    evening: false,
-  });
-  const [friday, setFriday] = useState({
-    name: 'Friday',
-    morning: false,
-    afternoon: false,
-    evening: false,
-  });
-  const [saturday, setSaturday] = useState({
-    name: 'Saturday',
-    morning: false,
-    afternoon: false,
-    evening: false,
-  });
-  const [sunday, setSunday] = useState({
-    name: 'Sunday',
-    morning: false,
-    afternoon: false,
-    evening: false,
-  });
+  useEffect(() => {
+    firestore()
+      .collection('Users')
+      .doc(auth().currentUser.uid)
+      .get()
+      .then(res => {
+        console.log(new IndexPath(1, 0).groupIndex);
+        let firestoreAvail = res.data().availability;
+        let formattedAvail = [];
+        for (let i = 0; i < 7; i++) {
+          for (let k = 0; k < 3; k++) {
+            if (firestoreAvail[days[i]][k]) {
+              formattedAvail.push(new IndexPath(k, i));
+            }
+          }
+        }
+        console.log(formattedAvail);
+        setAvailability(formattedAvail);
+      });
+  }, []);
 
+  const [availability, setAvailability] = useState([]);
+  const TimesOfDay = day => {
+    return (
+      <SelectGroup title={day}>
+        <SelectItem title={'Morning ⏰'} />
+        <SelectItem title={'Afternoon ☀️'} />
+        <SelectItem title={'Evening 🌙'} />
+      </SelectGroup>
+    );
+  };
+  const displayValue = 'Click here to edit availabilty';
+  const days = [
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+    'Sunday',
+  ];
   return (
-    <View style={{alignSelf: 'center'}}>
-      <Text></Text>
-      <DayCheckboxes day={monday} setDay={setMonday} />
-      <DayCheckboxes day={tuesday} setDay={setTuesday} />
-    </View>
+    <>
+      <View style={{alignSelf: 'center', width: '100%'}}>
+        <Text></Text>
+        <Select
+          value={displayValue}
+          style={{width: '100%'}}
+          label="Availability"
+          multiSelect={true}
+          selectedIndex={availability}
+          onSelect={index => {
+            setAvailability(index);
+            console.log(index);
+            let firestoreFormatted = {
+              Monday: [false, false, false],
+              Tuesday: [false, false, false],
+              Wednesday: [false, false, false],
+              Thursday: [false, false, false],
+              Friday: [false, false, false],
+              Saturday: [false, false, false],
+              Sunday: [false, false, false],
+            };
+            index.forEach(item => {
+              firestoreFormatted[days[item.section]][item.row] = true;
+            });
+            console.log(auth().currentUser.uid);
+            firestore()
+              .collection('Users')
+              .doc(auth().currentUser.uid)
+              .update({availability: firestoreFormatted})
+              .then(res => {
+                console.log('done');
+              });
+          }}>
+          {TimesOfDay(days[0])}
+          {TimesOfDay(days[1])}
+          {TimesOfDay(days[2])}
+          {TimesOfDay(days[3])}
+          {TimesOfDay(days[4])}
+          {TimesOfDay(days[5])}
+          {TimesOfDay(days[6])}
+        </Select>
+      </View>
+      <Button
+        status={'danger'}
+        style={{}}
+        onPress={() => {
+          auth().signOut();
+        }}>
+        Sign out
+      </Button>
+    </>
   );
 };
 

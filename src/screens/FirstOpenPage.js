@@ -79,14 +79,25 @@ const FirstOpenPage = () => {
               auth()
                 .signInAnonymously()
                 .then(user => {
-                  firestore().collection('Users').doc(user.user.uid).set({
-                    Name: name,
-                    dateCreated: firestore.Timestamp.now(),
-                    city,
-                    bio,
-                    lastOpen: firestore.Timestamp.now(),
-                  });
-                  userID = user.user.uid;
+                  firestore()
+                    .collection('Users')
+                    .doc(user.user.uid)
+                    .set({
+                      Name: name,
+                      dateCreated: firestore.Timestamp.now(),
+                      city,
+                      bio,
+                      lastOpen: firestore.Timestamp.now(),
+                      availability: {
+                        Monday: [true, true, true],
+                        Tuesday: [true, true, true],
+                        Wednesday: [true, true, true],
+                        Thursday: [true, true, true],
+                        Friday: [true, true, true],
+                        Saturday: [true, true, true],
+                        Sunday: [true, true, true],
+                      },
+                    });
                 });
             }
           }}>
