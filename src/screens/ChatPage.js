@@ -83,9 +83,12 @@ const ChatPage = ({navigation, route}) => {
           <>
             <ScrollView>
               {messages.map(({id, data}) =>
-                data.Name === senderName ? (
+                data.sender !== senderName ? (
                   <View key={id} style={styles.reciever}>
-                    <Text style={styles.recieverText}>{data.message}</Text>
+                    <Text style={styles.recieverText}>
+                      {data.sender}({data.timestamp.toDate().getHours()}:
+                      {data.timestamp.toDate().getMinutes()})- {data.message}
+                    </Text>
                   </View>
                 ) : (
                   <View style={styles.sender}>
@@ -149,17 +152,17 @@ const styles = StyleSheet.create({
   senderText: {},
   reciever: {
     padding: 15,
-    backgroundColor: 'blue',
+    backgroundColor: 'lightblue',
     alignSelf: 'flex-start',
     borderRadius: 30,
-    marginRight: 15,
+    marginLeft: 15,
     marginBottom: 20,
     maxWidth: '80%',
     position: 'relative',
   },
   sender: {
     padding: 15,
-    backgroundColor: 'green',
+    backgroundColor: 'lightgreen',
     alignSelf: 'flex-end',
     borderRadius: 30,
     marginRight: 15,
