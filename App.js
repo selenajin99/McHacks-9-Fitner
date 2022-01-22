@@ -18,6 +18,10 @@ import AccountPage from './src/screens/AccountPage';
 import ExplorePage from './src/screens/ExplorePage';
 import ChatsListPage from './src/screens/ChatsListPage';
 import FirstOpenPage from './src/screens/FirstOpenPage';
+import ChatPage from './src/screens/ChatPage';
+import {createStackNavigator} from '@react-navigation/stack';
+
+const Stack = createStackNavigator();
 
 const HeartIcon = props => <Icon {...props} name="heart" />;
 
@@ -49,6 +53,7 @@ const TabNavigator = () => (
     <Screen name="Explore" component={ExplorePage} />
     <Screen name="Chats" component={ChatsListPage} />
     <Screen name="Account" component={AccountPage} />
+    <Stack.Screen name="ChatPage" component={ChatPage} />
   </Navigator>
 );
 const App = () => {

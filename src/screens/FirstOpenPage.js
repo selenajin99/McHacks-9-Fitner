@@ -15,19 +15,20 @@ const FirstOpenPage = () => {
       <Input label={'Name'} onChangeText={setName} />
       <Input label={'City'} onChangeText={setCity} />
       <Input label={'Bio'} onChangeText={setBio} />
+
       <Button
         onPress={() => {
           auth()
             .signInAnonymously()
-            .then(user => {
-              firestore().collection('Users').doc(user.user.uid).set({
+            .then(returned => {
+              // make the doc ID a username so that we can use that to find the user and add friends
+              firestore().collection('Users').doc(returned.user.uid).set({
                 Name: name,
                 dateCreated: firestore.Timestamp.now(),
                 city,
                 bio,
                 lastOpen: firestore.Timestamp.now(),
               });
-              userID = user.user.uid;
             });
         }}
       />
