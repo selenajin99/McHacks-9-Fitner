@@ -37,6 +37,7 @@ const ProfileCard = props => {
                     ),
                     members: [auth().currentUser.uid, 'tomsid'],
                   });
+                  //navigate to chat that was created
                 });
             }}>
             Chat

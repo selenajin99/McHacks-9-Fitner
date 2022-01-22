@@ -99,6 +99,7 @@ const FirstOpenPage = () => {
                       bio,
                       lastOpen: firestore.Timestamp.now(),
                       chats: [],
+                      activities: [],
                       availability: {
                         Monday: [true, true, true],
                         Tuesday: [true, true, true],
