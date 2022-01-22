@@ -45,7 +45,7 @@ const ExplorePage = () => {
     //     });
     console.log('filtered shitt');
     console.log(filteredusers);
-  });
+  }, []);
 
   return (
     <View>

@@ -34,16 +34,21 @@ const ChatPage = ({navigation, route}) => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: 'chat',
-
       headerTitle: () => (
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <Text>{route.params.chatName}</Text>
+        <View
+          style={{
+            position: 'absolute',
+            flexDirection: 'row',
+            alignItems: 'center',
+          }}>
+          <Text style={{fontSize: 20}}> {route.params.chatName}</Text>
         </View>
       ),
       headerRight: () => {
         return (
-          <Text style={{fontSize: 10}}>Room code: {route.params.chatCode}</Text>
+          <Text style={{fontSize: 12, marginEnd: 10}}>
+            Room Code: {route.params.chatCode}
+          </Text>
         );
       },
     });
@@ -77,17 +82,17 @@ const ChatPage = ({navigation, route}) => {
     return rob;
   }, [route]);
 
+  const scrollViewRef = React.createRef();
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
-      {/* <Text>{route.params.id}</Text>
-      <Text>{route.params.chatName}</Text> */}
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        // behavior={Platform.OS === 'ios' ? 'padding' : ''}
         style={styles.container}
-        keyboardVerticalOffset={120}>
+        // keyboardVerticalOffset={120}
+      >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <>
-            <ScrollView>
+            <ScrollView ref={scrollViewRef}>
               {messages.map(({id, data}) =>
                 data.sender !== senderName ? (
                   <View key={id} style={styles.reciever}>
@@ -108,6 +113,9 @@ const ChatPage = ({navigation, route}) => {
 
             <View style={styles.footer}>
               <TextInput
+                onFocus={() => {
+                  scrollViewRef.current.scrollToEnd({animated: true});
+                }}
                 value={input}
                 onChangeText={text => setInput(text)}
                 onSubmitEditing={sendMessage}
