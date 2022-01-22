@@ -1,0 +1,6 @@
+module Pods_Fitner_FitnerTests {
+  umbrella header "Pods-Fitner-FitnerTests-umbrella.h"
+
+  export *
+  module * { export * }
+}

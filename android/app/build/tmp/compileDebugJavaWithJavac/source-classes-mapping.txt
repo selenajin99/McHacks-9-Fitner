@@ -1,0 +1,14 @@
+com/fitner/BuildConfig.java
+ com.fitner.BuildConfig
+com/fitner/MainApplication.java
+ com.fitner.MainApplication
+ com.fitner.MainApplication$1
+com/fitner/MainActivity.java
+ com.fitner.MainActivity
+com/fitner/ReactNativeFlipper.java
+ com.fitner.ReactNativeFlipper
+ com.fitner.ReactNativeFlipper$1
+ com.fitner.ReactNativeFlipper$2
+ com.fitner.ReactNativeFlipper$2$1
+com/facebook/react/PackageList.java
+ com.facebook.react.PackageList
