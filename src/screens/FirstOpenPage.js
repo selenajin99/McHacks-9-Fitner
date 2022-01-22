@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, Dimensions} from 'react-native';
+import {View, Text, StyleSheet, Dimensions, Keyboard} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Button, Input, Modal, Card} from '@ui-kitten/components';
 import firestore from '@react-native-firebase/firestore';
@@ -7,6 +7,7 @@ import auth from '@react-native-firebase/auth';
 import MapView, {Marker} from 'react-native-maps';
 import axios from 'axios';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import {TouchableWithoutFeedback} from '@ui-kitten/components/devsupport';
 
 const baseUrl = 'https://maps.googleapis.com/maps/api/geocode/json?address=';
 
@@ -54,13 +55,20 @@ const FirstOpenPage = () => {
             onChangeText={setBio}
             style={{marginVertical: '10%'}}
           />
-          <TouchableOpacity
-            onPress={() => {
-              setMapVisible(true);
-            }}>
-            <View pointerEvents="none">
-              <Input label={'Location'} value={city} focusable={false} />
-            </View>
+
+          <TouchableOpacity>
+            <Input
+              showSoftInputOnFocus={false}
+              keyboardType={null}
+              label={'Location'}
+              value={city}
+              onFocus={() => {
+                Keyboard.dismiss();
+                setMapVisible(true);
+              }}
+              editable={false}
+              focusable={false}
+            />
           </TouchableOpacity>
         </View>
 
