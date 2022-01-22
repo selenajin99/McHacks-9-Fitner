@@ -15,6 +15,7 @@ import {
 import {Icon, Tooltip} from '@ui-kitten/components';
 import firestore, {firebase} from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 const ChatPage = ({navigation, route}) => {
   console.log(route.params);
@@ -82,17 +83,16 @@ const ChatPage = ({navigation, route}) => {
     return rob;
   }, [route]);
 
-  const scrollViewRef = React.createRef();
+  const scrollViewRef = React.useRef();
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
       <KeyboardAvoidingView
-        // behavior={Platform.OS === 'ios' ? 'padding' : ''}
+        behavior={Platform.OS === 'ios' ? 'padding' : ''}
         style={styles.container}
-        // keyboardVerticalOffset={120}
-      >
+        keyboardVerticalOffset={120}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <>
-            <ScrollView ref={scrollViewRef}>
+            <KeyboardAwareScrollView ref={scrollViewRef}>
               {messages.map(({id, data}) =>
                 data.sender !== senderName ? (
                   <View key={id} style={styles.reciever}>
@@ -109,12 +109,12 @@ const ChatPage = ({navigation, route}) => {
                   </View>
                 ),
               )}
-            </ScrollView>
+            </KeyboardAwareScrollView>
 
             <View style={styles.footer}>
               <TextInput
                 onFocus={() => {
-                  scrollViewRef.current.scrollToEnd({animated: true});
+                  scrollViewRef.current.scrollToEnd({animated: false});
                 }}
                 value={input}
                 onChangeText={text => setInput(text)}
