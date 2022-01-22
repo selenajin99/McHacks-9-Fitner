@@ -5,6 +5,7 @@ import auth from '@react-native-firebase/auth';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import storage from '@react-native-firebase/storage';
+import ImageResizer from 'react-native-image-resizer';
 import {
   Autocomplete,
   AutocompleteItem,
@@ -44,6 +45,9 @@ const AccountPage = () => {
         setName(res.data().Name);
         setBio(res.data().bio);
         setCity(res.data().city);
+        if (res.data().imageUri) {
+          setProfileUri(res.data().imageUri);
+        }
         axios({
           method: 'get',
           url: `${baseUrl}${
@@ -113,6 +117,9 @@ const AccountPage = () => {
     'Saturday',
     'Sunday',
   ];
+  const [profileUri, setProfileUri] = useState(
+    'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png',
+  );
   const presetActivities = [
     {title: 'Soccer'},
     {title: 'Basketball'},
@@ -156,7 +163,59 @@ const AccountPage = () => {
           <TouchableOpacity
             onPress={() => {
               launchImageLibrary().then(image => {
-                storage().ref(auth().currentUser.uid).putFile(image);
+                ImageResizer.createResizedImage(
+                  image.assets[0].uri,
+                  100,
+                  100,
+                  'PNG',
+                  100,
+                  0,
+                  image.assets[0].uri,
+                )
+                  .then(response => {
+                    let uri = response.uri;
+
+                    let imageName =
+                      'profile/' + auth().currentUser.uid + '.png';
+                    let uploadUri =
+                      Platform.OS === 'ios' ? uri.replace('file://', '') : uri;
+
+                    firebase
+                      .storage()
+                      .ref(imageName)
+                      .putFile(uploadUri)
+                      .then(snapshot => {
+                        //You can check the image is now uploaded in the storage bucket
+                        console.log(
+                          `${imageName} has been successfully uploaded.`,
+                        );
+
+                        firebase
+                          .storage()
+                          .ref(imageName)
+                          .getDownloadURL()
+                          .then(url => {
+                            setProfileUri(url);
+                            firestore()
+                              .collection('Users')
+                              .doc(auth().currentUser.uid)
+                              .update({imageUri: url});
+                          });
+                      })
+                      .catch(e => console.log('uploading image error => ', e));
+                  })
+                  .catch(err => {
+                    console.log('image resizing error => ', err);
+                  });
+                // storage()
+                //   .ref(auth().currentUser.uid)
+                //   .putFile(image.assets[0].uri)
+                //   .then(res => {
+                //     console.log(res);
+                //   })
+                //   .catch(e => {
+                //     console.log(e);
+                //   });
               });
             }}
             style={{
@@ -172,7 +231,7 @@ const AccountPage = () => {
                 height: 90,
               }}
               source={{
-                uri: 'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png',
+                uri: profileUri,
               }}
             />
           </TouchableOpacity>

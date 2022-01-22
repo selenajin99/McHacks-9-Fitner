@@ -100,6 +100,8 @@ const FirstOpenPage = () => {
                       lastOpen: firestore.Timestamp.now(),
                       chats: [],
                       activities: [],
+                      imageUri:
+                        'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png',
                       availability: {
                         Monday: [true, true, true],
                         Tuesday: [true, true, true],
