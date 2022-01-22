@@ -10,6 +10,7 @@ import {
   SelectGroup,
   SelectItem,
   Tooltip,
+  Avatar,
 } from '@ui-kitten/components';
 
 import axios from 'axios';
@@ -111,10 +112,33 @@ const AccountPage = () => {
     <>
       <View
         style={{
+          flex: 0,
+        }}>
+        <TouchableOpacity
+          style={{
+            top: 30,
+            width: 100,
+            alignSelf: 'center',
+            height: 100,
+          }}>
+          <Avatar
+            style={{
+              top: 5,
+              width: 90,
+              height: 90,
+            }}
+            source={{
+              uri: 'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png',
+            }}
+          />
+        </TouchableOpacity>
+      </View>
+      <View
+        style={{
+          flex: 1,
+          marginTop: 50,
           alignSelf: 'center',
           width: '90%',
-          justifyContent: 'center',
-          height: '100%',
         }}>
         <Tooltip
           anchor={renderNameInput}
