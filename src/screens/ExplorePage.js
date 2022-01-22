@@ -7,7 +7,7 @@ import auth from '@react-native-firebase/auth';
 import {Input} from '@ui-kitten/components';
 import {useIsFocused} from '@react-navigation/native';
 
-const ExplorePage = () => {
+const ExplorePage = ({navigation}) => {
   const [value, setValue] = useState('');
   const [filteredusers, setFilteredusers] = useState([]);
   const [currentUserSports, setCurrentUserSports] = useState([]);
@@ -24,7 +24,7 @@ const ExplorePage = () => {
             setCurrentUserSports(doc._data.activities);
             setCurrentUserTimes(doc._data.avalibilities);
           } else {
-            tempUsers.push(doc._data);
+            tempUsers.push({...doc._data, id: doc.ref.id});
           }
         });
         setFilteredusers(tempUsers);
@@ -33,19 +33,15 @@ const ExplorePage = () => {
 
   const isMatched = user => {
     // check matched sports
-    console.log(user.Name);
+
     if (
       user.activities &&
       user.activities.some(item => currentUserSports.includes(item))
     ) {
-      console.log(' MATHCED');
-      console.log(user.activities);
       return true;
 
       // check avalibility
     } else {
-      console.log('NOT MATHCED');
-      console.log(user.activities);
       return false;
     }
   };
@@ -100,6 +96,8 @@ const ExplorePage = () => {
         renderItem={item => {
           return (
             <ProfileCard
+              navigation={navigation}
+              id={item.item.id}
               imageUri={item.item.imageUri}
               currSports={currentUserSports}
               name={item.item.Name}

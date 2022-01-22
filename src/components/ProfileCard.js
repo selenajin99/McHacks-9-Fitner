@@ -38,7 +38,6 @@ const ProfileCard = props => {
                 : []
             }
             renderItem={item => {
-              console.log('HI');
               return (
                 <View style={styles.chip}>
                   <Text style={{justifyContent: 'center'}}>{item.item}</Text>
@@ -51,16 +50,53 @@ const ProfileCard = props => {
             onPress={() => {
               firestore()
                 .collection('Chats')
-                .add({chatName: 'New group'})
-                .then(doc => {
-                  doc.update({
-                    chatCode: doc.id.substring(
-                      doc.id.length - 4,
-                      doc.id.length,
-                    ),
-                    members: [auth().currentUser.uid, 'tomsid'],
+                .where('members', 'array-contains-any', [
+                  auth().currentUser.uid,
+                  props.id,
+                ])
+                .get()
+                .then(snapshot => {
+                  let chatExists = false;
+                  snapshot.docs.forEach((doc, index) => {
+                    console.log('going throught' + props.id);
+                    if (
+                      doc.data().members.length == 2 &&
+                      doc.data().members.includes(auth().currentUser.uid) &&
+                      doc.data().members.includes(props.id)
+                    ) {
+                      console.log('HI');
+                      props.navigation.navigate('ChatPage', {
+                        id: doc.ref.id,
+                        chatName: doc.data().chatName,
+                        chatCode: doc.data().chatCode,
+                      });
+                      chatExists = true;
+                    }
+                    if (
+                      index == snapshot.docs.length - 1 &&
+                      chatExists == false
+                    ) {
+                      console.log('creating');
+                      firestore()
+                        .collection('Chats')
+                        .add({chatName: 'New group'})
+                        .then(doc => {
+                          let chatCode = doc.id.substring(
+                            doc.id.length - 4,
+                            doc.id.length,
+                          );
+                          doc.update({
+                            chatCode,
+                            members: [auth().currentUser.uid, props.id],
+                          });
+                          props.navigation.navigate('ChatPage', {
+                            id: doc.id,
+                            chatName: 'New group',
+                            chatCode,
+                          });
+                        });
+                    }
                   });
-                  //navigate to chat that was created
                 });
             }}>
             <Icon
