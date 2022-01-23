@@ -19,9 +19,6 @@ import auth from '@react-native-firebase/auth';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 const ChatPage = ({navigation, route}) => {
-  console.log('hi');
-
-  console.log(route.params);
   const [input, setInput] = useState('');
   const [senderName, setSenderName] = useState('');
   const [messages, setMessages] = useState([]);
@@ -56,6 +53,15 @@ const ChatPage = ({navigation, route}) => {
           }
         });
     });
+    const rob = firestore()
+      .collection('Chats')
+      .doc(route.params.id)
+      .collection('Messages')
+      .orderBy('timestamp', 'asc')
+      .onSnapshot(snapshot =>
+        setMessages(snapshot.docs.map(doc => ({id: doc.id, data: doc.data()}))),
+      );
+    return rob;
   }, []);
 
   useLayoutEffect(() => {
@@ -94,19 +100,6 @@ const ChatPage = ({navigation, route}) => {
 
     setInput('');
   };
-
-  useLayoutEffect(() => {
-    const rob = firestore()
-      .collection('Chats')
-      .doc(route.params.id)
-      .collection('Messages')
-      .orderBy('timestamp', 'asc')
-      .onSnapshot(snapshot =>
-        setMessages(snapshot.docs.map(doc => ({id: doc.id, data: doc.data()}))),
-      );
-    return rob;
-  }, [route]);
-
   const scrollViewRef = React.useRef();
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>

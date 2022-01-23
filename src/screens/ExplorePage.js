@@ -34,7 +34,6 @@ const ExplorePage = ({navigation}) => {
 
   const isMatched = user => {
     // check matched sports
-
     if (
       user.activities &&
       user.activities.some(item => currentUserSports.includes(item))
@@ -95,6 +94,7 @@ const ExplorePage = ({navigation}) => {
         renderItem={item => {
           return (
             <ProfileCard
+              id={item.id}
               navigation={navigation}
               user={item.item}
               currSports={currentUserSports}

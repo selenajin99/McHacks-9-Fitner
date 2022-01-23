@@ -9,9 +9,6 @@ import {launchImageLibrary} from 'react-native-image-picker';
 
 import ImageResizer from 'react-native-image-resizer';
 import {
-  Autocomplete,
-  AutocompleteItem,
-  Button,
   IndexPath,
   Input,
   Select,
@@ -19,7 +16,6 @@ import {
   SelectItem,
   Tooltip,
   Avatar,
-  Icon,
 } from '@ui-kitten/components';
 
 import axios from 'axios';
@@ -44,11 +40,16 @@ const AccountPage = ({route, navigation}) => {
             }
           }
         }
+        let tempArray = [];
+        res.data().activities.forEach(activity => {
+          tempArray.push(new IndexPath(presetActivities.indexOf(activity)));
+        });
+
         setAvailability(formattedAvail);
         setName(res.data().Name);
         setBio(res.data().bio);
         setCity(res.data().city);
-        setActivies(res.data().activities);
+
         axios({
           method: 'get',
           url: `${baseUrl}${
@@ -63,6 +64,10 @@ const AccountPage = ({route, navigation}) => {
         });
       });
   }, []);
+  const [selectedActivities, setSelectedActivities] = React.useState([
+    new IndexPath(0),
+    new IndexPath(1),
+  ]);
 
   const renderNameInput = () => {
     return (
@@ -120,38 +125,31 @@ const AccountPage = ({route, navigation}) => {
   ];
 
   const presetActivities = [
-    {title: 'Soccer'},
-    {title: 'Basketball'},
-    {title: 'Baseball'},
-    {title: 'Cricket'},
-    {title: 'Squash'},
-    {title: 'Swimming'},
-    {title: 'Running'},
-    {title: 'Skating'},
-    {title: 'Badminton'},
-    {title: 'Tennis'},
-    {title: 'Curling'},
-    {title: 'Field Hockey'},
-    {title: 'Ice Hockey'},
-    {title: 'Beach Volleyball'},
-    {title: 'Volleyball'},
-    {title: 'American Football'},
-    {title: 'Skiing'},
-    {title: 'Snowboarding'},
-    {title: 'Table Tennis'},
-    {title: 'Walking'},
-    {title: 'Hiking'},
-    {title: 'Bowling'},
-    {title: 'Boxing'},
+    'Soccer',
+    'Basketball',
+    'Baseball',
+    'Cricket',
+    'Squash',
+    'Swimming',
+    'Running',
+    'Skating',
+    'Badminton',
+    'Tennis',
+    'Curling',
+    'Field Hockey',
+    'Ice Hockey',
+    'Beach Volleyball',
+    'Volleyball',
+    'American Football',
+    'Skiing',
+    'Snowboarding',
+    'Table Tennis',
+    'Walking',
+    'Hiking',
+    'Bowling',
+    'Boxing',
   ];
-  const filter = (item, query) =>
-    item.title.toLowerCase().includes(query.toLowerCase());
-  const [activityInput, setActivityInput] = useState(null);
-  const [activities, setActivies] = useState([]);
-  const [data, setData] = useState(presetActivities);
-  const renderOption = (item, index) => (
-    <AutocompleteItem key={index} title={item.title} />
-  );
+
   return (
     <>
       <KeyboardAwareScrollView style={{marginBottom: 20}}>
@@ -276,6 +274,50 @@ const AccountPage = ({route, navigation}) => {
           </TouchableOpacity>
 
           <Select
+            value={'Select activities here'}
+            multiSelect={true}
+            selectedIndex={selectedActivities}
+            onSelect={index => {
+              setSelectedActivities(index);
+              let tempArray = [];
+              index.forEach(item => {
+                tempArray.push(presetActivities[item.row]);
+              });
+
+              firestore()
+                .collection('Users')
+                .doc(auth().currentUser.uid)
+                .update({activities: tempArray})
+                .then(res => {
+                  console.log('done');
+                });
+            }}>
+            <SelectItem title="Soccer" />
+            <SelectItem title="Basketball" />
+            <SelectItem title="Baseball" />
+            <SelectItem title="Cricket" />
+            <SelectItem title="Squash" />
+            <SelectItem title="Swimming" />
+            <SelectItem title="Running" />
+            <SelectItem title="Skating" />
+            <SelectItem title="Badminton" />
+            <SelectItem title="Tennis" />
+            <SelectItem title="Curling" />
+            <SelectItem title="Field Hockey" />
+            <SelectItem title="Ice Hockey" />
+            <SelectItem title="Beach Volleyball" />
+            <SelectItem title="Volleyball" />
+            <SelectItem title="American Football" />
+            <SelectItem title="Skiing" />
+            <SelectItem title="Snowboarding" />
+            <SelectItem title="Table Tennis" />
+            <SelectItem title="Walking" />
+            <SelectItem title="Hiking" />
+            <SelectItem title="Bowling" />
+            <SelectItem title="Boxing" />
+          </Select>
+
+          <Select
             value={displayValue}
             style={{width: '100%', marginVertical: '10%'}}
             label="Availability"
@@ -313,84 +355,6 @@ const AccountPage = ({route, navigation}) => {
             {TimesOfDay(days[5])}
             {TimesOfDay(days[6])}
           </Select>
-
-          <Autocomplete
-            placeholder="Type activities in here..."
-            value={activityInput}
-            onSelect={index => {
-              setActivityInput(data[index].title);
-            }}
-            onSubmitEditing={() => {
-              let theActivity = false;
-              presetActivities.forEach(activity => {
-                if (
-                  activity.title
-                    .toLowerCase()
-                    .startsWith(activityInput.toLowerCase()) &&
-                  !activities.includes(activity.title)
-                ) {
-                  theActivity = activity.title;
-                }
-              });
-
-              if (theActivity) {
-                let newActivities = [...activities, theActivity];
-                firestore()
-                  .collection('Users')
-                  .doc(auth().currentUser.uid)
-                  .update({activities: newActivities});
-                setActivies(newActivities);
-                setActivityInput('');
-                setData(
-                  presetActivities.filter(item => {
-                    if (
-                      activities.includes(item.title) ||
-                      item.title.includes(theActivity)
-                    ) {
-                      return false;
-                    } else {
-                      return true;
-                    }
-                  }),
-                );
-              }
-            }}
-            onChangeText={query => {
-              setActivityInput(query);
-              setData(presetActivities.filter(item => filter(item, query)));
-            }}>
-            {data.map(renderOption)}
-          </Autocomplete>
-          <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-            {activities.map((activity, index) => {
-              return (
-                <TouchableOpacity
-                  style={styles.chip}
-                  onPress={() => {
-                    let newActivities = activities.filter(
-                      item => item != activity,
-                    );
-                    setActivies(newActivities);
-                    firestore()
-                      .collection('Users')
-                      .doc(auth().currentUser.uid)
-                      .update({activities: newActivities});
-                  }}
-                  key={index}>
-                  <Text style={{marginLeft: 20}}>{activity}</Text>
-                  <Icon
-                    name="trash-outline"
-                    style={{
-                      width: 15,
-                      height: 15,
-                      marginLeft: 5,
-                      fill: '#8F9BB3',
-                    }}
-                  />
-                </TouchableOpacity>
-              );
-            })}
-          </View>
         </View>
       </KeyboardAwareScrollView>
       <MapModal
@@ -414,18 +378,5 @@ const AccountPage = ({route, navigation}) => {
     </>
   );
 };
-const styles = StyleSheet.create({
-  chip: {
-    justifyContent: 'center',
-    alignContent: 'center',
-    flexDirection: 'row',
-    borderRadius: 10,
-    borderColor: ' black',
-    borderWidth: 1,
-    textAlign: 'center',
-    paddingHorizontal: 15,
-    marginHorizontal: 5,
-  },
-});
 
 export default AccountPage;
