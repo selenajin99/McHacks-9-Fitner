@@ -38,7 +38,7 @@ const ProfilePage = ({route}) => {
           <View
             style={{
               flexDirection: 'row',
-              // flexWrap: 'wrap',
+              flexWrap: 'wrap',
               marginHorizontal: '5%',
             }}>
             {route.params.user.activities.map((activity, index) => {

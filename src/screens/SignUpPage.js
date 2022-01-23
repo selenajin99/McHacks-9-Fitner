@@ -83,7 +83,6 @@ const SignUpPage = () => {
 
   const presetActivities = [
     'Rock Climbing',
-    'Ping Pong',
     'Rugby',
     'Golf',
     'Yoga',
@@ -176,7 +175,6 @@ const SignUpPage = () => {
               });
             }}>
             <SelectItem title="Rock Climbing" />
-            <SelectItem title="Ping Pong" />
             <SelectItem title="Rugby" />
             <SelectItem title="Yoga" />
             <SelectItem title="Gym" />

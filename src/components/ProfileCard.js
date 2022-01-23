@@ -32,14 +32,14 @@ const ProfileCard = props => {
               horizontal={true}
               data={
                 props.user.activities
-                  ? props.user.activities.filter(item => {
-                      if (props.currSports.includes(item)) {
-                        return true;
-                      } else {
-                        return false;
-                      }
-                    })
-                  : []
+                // ? props.user.activities.filter(item => {
+                //     if (props.currSports.includes(item)) {
+                //       return true;
+                //     } else {
+                //       return false;
+                //     }
+                //   })
+                // : []
               }
               renderItem={item => {
                 return (

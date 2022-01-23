@@ -130,7 +130,6 @@ const AccountPage = ({route, navigation}) => {
 
   const presetActivities = [
     'Rock Climbing',
-    'Ping Pong',
     'Rugby',
     'Golf',
     'Yoga',
@@ -307,6 +306,10 @@ const AccountPage = ({route, navigation}) => {
                   console.log('done');
                 });
             }}>
+            <SelectItem title="Rock Climbing" />
+            <SelectItem title="Rugby" />
+            <SelectItem title="Yoga" />
+            <SelectItem title="Gym" />
             <SelectItem title="Soccer" />
             <SelectItem title="Basketball" />
             <SelectItem title="Baseball" />
