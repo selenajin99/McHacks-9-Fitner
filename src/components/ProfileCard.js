@@ -71,7 +71,6 @@ const ProfileCard = props => {
                         doc.data().members.includes(auth().currentUser.uid) &&
                         doc.data().members.includes(props.user.id)
                       ) {
-                        console.log('HI');
                         props.navigation.navigate('ChatPage', {
                           id: doc.ref.id,
                           chatName: doc.data().chatName,

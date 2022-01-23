@@ -1,12 +1,12 @@
 import React from 'react';
 import {Text, Avatar} from '@ui-kitten/components';
-import {View, StyleSheet, ScrollView} from 'react-native';
+import {View, StyleSheet, ScrollView, Dimensions} from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 
 const ProfilePage = ({route}) => {
   return (
-    <ScrollView>
+    <ScrollView nestedScrollEnabled={true}>
       <Avatar
         style={styles.profile}
         source={{
@@ -16,7 +16,9 @@ const ProfilePage = ({route}) => {
       <Text style={styles.name}>{route.params.user.Name}</Text>
       <Text style={styles.categories}>Bio</Text>
       <View style={styles.bio}>
-        <Text>{route.params.user.bio}</Text>
+        <ScrollView nestedScrollEnabled={true}>
+          <Text>{route.params.user.bio}</Text>
+        </ScrollView>
       </View>
       <Text style={styles.categories}>Activities</Text>
       <View
@@ -215,12 +217,11 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   profile: {
-    height: 100,
-    width: 100,
-    justifyContent: 'center',
+    top: 30,
+    width: Dimensions.get('window').width * 0.55,
+    height: Dimensions.get('window').width * 0.55,
     alignSelf: 'center',
-    marginHorizontal: 10,
-    position: 'relative',
+    marginBottom: '5%',
   },
   right: {
     padding: 5,
@@ -246,7 +247,7 @@ const styles = StyleSheet.create({
     borderStyle: 'dotted',
     borderRadius: 10,
     width: '90%',
-    height: '30%',
+    height: '20%',
     padding: '2%',
     marginHorizontal: '5%',
   },
@@ -258,6 +259,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 10,
+    margin: '2%',
   },
   sports: {
     flexDirection: 'row',

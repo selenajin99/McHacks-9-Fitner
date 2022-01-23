@@ -153,7 +153,16 @@ const AccountPage = ({route, navigation}) => {
     'Bowling',
     'Boxing',
   ];
-
+  // use enter key to submit form - used in bio edit
+  const handleKeyDown = event => {
+    if (event.which === 13) {
+      inputRef.current.getElementsByTagName('textarea')[0].style.height =
+        'auto';
+      addMessage(event);
+      event.preventDefault();
+      Keyboard.dismiss();
+    }
+  };
   return (
     <>
       <KeyboardAwareScrollView style={{marginBottom: 20}}>
@@ -243,6 +252,8 @@ const AccountPage = ({route, navigation}) => {
             value={bio}
             onChangeText={setBio}
             style={{marginVertical: '10%'}}
+            multiline={true}
+            onKeyDown={handleKeyDown}
             onSubmitEditing={newBio => {
               firestore()
                 .collection('Users')
@@ -271,6 +282,8 @@ const AccountPage = ({route, navigation}) => {
           <Select
             value={'Select activities here'}
             multiSelect={true}
+            label={'Activities'}
+            style={{width: '100%', marginTop: '10%'}}
             selectedIndex={selectedActivities}
             onSelect={index => {
               setSelectedActivities(index);

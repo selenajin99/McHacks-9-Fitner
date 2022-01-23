@@ -1,8 +1,9 @@
+/* eslint-disable react/jsx-no-undef */
 /* eslint-disable react-hooks/exhaustive-deps */
 import 'react-native-gesture-handler';
 import auth from '@react-native-firebase/auth';
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, SafeAreaView} from 'react-native';
+import {StyleSheet, SafeAreaView, TouchableOpacity} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
 import firestore, {firebase} from '@react-native-firebase/firestore';
@@ -14,7 +15,7 @@ import {
   BottomNavigationTab,
   Icon,
   IconRegistry,
-  Button,
+  Text,
 } from '@ui-kitten/components';
 import {EvaIconsPack} from '@ui-kitten/eva-icons';
 import * as eva from '@eva-design/eva';
@@ -25,7 +26,6 @@ import ChatsListPage from './src/screens/ChatsListPage';
 import FirstOpenPage from './src/screens/FirstOpenPage';
 import ChatPage from './src/screens/ChatPage';
 import {createStackNavigator} from '@react-navigation/stack';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const Stack = createStackNavigator();
 
@@ -65,12 +65,15 @@ const App = () => {
           options={{
             headerRight: () => {
               return (
-                <Button
+                <TouchableOpacity
                   onPress={() => {
                     auth().signOut();
+                  }}
+                  style={{
+                    marginRight: '10%',
                   }}>
-                  Sign out
-                </Button>
+                  <Text style={{color: 'red'}}>Sign out</Text>
+                </TouchableOpacity>
               );
             },
           }}
