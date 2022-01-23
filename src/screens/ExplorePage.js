@@ -5,6 +5,7 @@ import {View, StyleSheet, FlatList} from 'react-native';
 import ProfileCard from '../components/ProfileCard';
 import auth from '@react-native-firebase/auth';
 import {Input} from '@ui-kitten/components';
+import {useIsFocused} from '@react-navigation/native';
 
 const ExplorePage = ({navigation}) => {
   const [value, setValue] = useState('');
@@ -13,6 +14,7 @@ const ExplorePage = ({navigation}) => {
   const [currentUserTimes, setCurrentUserTimes] = useState([]);
 
   const getMatchedUsers = () => {
+    setFilteredusers([]);
     firestore()
       .collection('Users')
       .get()
@@ -23,7 +25,7 @@ const ExplorePage = ({navigation}) => {
             setCurrentUserSports(doc._data.activities);
             setCurrentUserTimes(doc._data.avalibilities);
           } else {
-            tempUsers.push(doc._data);
+            tempUsers.push({...doc._data, id: doc.ref.id});
           }
         });
         setFilteredusers(tempUsers);
@@ -32,7 +34,7 @@ const ExplorePage = ({navigation}) => {
 
   const isMatched = user => {
     // check matched sports
-    console.log(user.Name);
+
     if (
       user.activities &&
       user.activities.some(item => currentUserSports.includes(item))
@@ -65,7 +67,7 @@ const ExplorePage = ({navigation}) => {
 
   useEffect(() => {
     getMatchedUsers();
-  }, []);
+  }, [useIsFocused()]);
 
   return (
     <View>
@@ -80,6 +82,9 @@ const ExplorePage = ({navigation}) => {
         }}
       />
       <FlatList
+        style={{height: '100%'}}
+        onRefresh={getMatchedUsers}
+        refreshing={!filteredusers}
         ListFooterComponent={() => {
           return <View style={{margin: '10%'}}></View>;
         }}

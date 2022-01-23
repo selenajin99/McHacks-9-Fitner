@@ -7,75 +7,107 @@ import {FlatList, TouchableOpacity} from 'react-native-gesture-handler';
 
 const ProfileCard = props => {
   return (
-    <TouchableOpacity
-      onPress={() => {
-        props.navigation.navigate('ProfilePage', {user: props.user});
-      }}>
-      <View style={styles.card}>
-        <Avatar
-          style={styles.profile}
-          source={{
-            uri: props.user.imageUri,
-          }}
-        />
-        <View style={styles.right}>
-          <Text style={{fontSize: 30, marginBottom: 5}}>{props.user.Name}</Text>
-          <Text
-            numberOfLines={3}
-            ellipsizeMode="tail"
-            style={{fontSize: 13, padding: 2}}>
-            {props.user.bio}
-          </Text>
-          <View style={{flexDirection: 'row', bottom: 0, position: 'absolute'}}>
-            <FlatList
-              style={{height: 30}}
-              horizontal={true}
-              data={
-                props.user.activities
-                  ? props.user.activities.filter(item => {
-                      if (props.currSports.includes(item)) {
-                        return true;
-                      } else {
-                        return false;
-                      }
-                    })
-                  : []
-              }
-              renderItem={item => {
-                return (
-                  <View style={styles.chip}>
-                    <Text style={{justifyContent: 'center'}}>{item.item}</Text>
-                  </View>
-                );
-              }}
-            />
+    <View style={styles.card}>
+      <Avatar
+        style={styles.profile}
+        source={{
+          uri: props.user.imageUri,
+        }}
+      />
+      <View style={styles.right}>
+        <Text style={{fontSize: 30, marginBottom: 5}}>{props.user.Name}</Text>
+        <Text
+          numberOfLines={3}
+          ellipsizeMode="tail"
+          style={{fontSize: 13, padding: 2}}>
+          {props.user.bio}
+        </Text>
+        <View style={{flexDirection: 'row', bottom: 0, position: 'absolute'}}>
+          <FlatList
+            style={{height: 30}}
+            horizontal={true}
+            data={
+              props.user.activities
+                ? props.user.activities.filter(item => {
+                    if (props.currSports.includes(item)) {
+                      return true;
+                    } else {
+                      return false;
+                    }
+                  })
+                : []
+            }
+            renderItem={item => {
+              return (
+                <View style={styles.chip}>
+                  <Text style={{justifyContent: 'center'}}>{item.item}</Text>
+                </View>
+              );
+            }}
+          />
 
-            <TouchableOpacity
-              onPress={() => {
-                firestore()
-                  .collection('Chats')
-                  .add({chatName: 'New group'})
-                  .then(doc => {
-                    doc.update({
-                      chatCode: doc.id.substring(
-                        doc.id.length - 4,
-                        doc.id.length,
-                      ),
-                      members: [auth().currentUser.uid, 'tomsid'],
-                    });
-                    //navigate to chat that was created
+          <TouchableOpacity
+            onPress={() => {
+              firestore()
+                .collection('Chats')
+                .where('members', 'array-contains-any', [
+                  auth().currentUser.uid,
+                  props.id,
+                ])
+                .get()
+                .then(snapshot => {
+                  let chatExists = false;
+                  snapshot.docs.forEach((doc, index) => {
+                    console.log('going throught' + props.id);
+                    if (
+                      doc.data().members.length == 2 &&
+                      doc.data().members.includes(auth().currentUser.uid) &&
+                      doc.data().members.includes(props.id)
+                    ) {
+                      console.log('HI');
+                      props.navigation.navigate('ChatPage', {
+                        id: doc.ref.id,
+                        chatName: doc.data().chatName,
+                        chatCode: doc.data().chatCode,
+                      });
+                      chatExists = true;
+                    }
+                    if (
+                      index == snapshot.docs.length - 1 &&
+                      chatExists == false
+                    ) {
+                      console.log('creating');
+                      firestore()
+                        .collection('Chats')
+                        .add({chatName: 'New group'})
+                        .then(doc => {
+                          let chatCode = doc.id.substring(
+                            doc.id.length - 4,
+                            doc.id.length,
+                          );
+                          doc.update({
+                            chatCode,
+                            members: [auth().currentUser.uid, props.id],
+                          });
+                          props.navigation.navigate('ChatPage', {
+                            id: doc.id,
+                            chatName: 'New group',
+                            chatCode,
+                          });
+                        });
+                    }
                   });
-              }}>
-              <Icon
-                style={styles.chat}
-                fill="#8F9BB3"
-                name="message-circle-outline"
-              />
-            </TouchableOpacity>
-          </View>
+                });
+            }}>
+            <Icon
+              style={styles.chat}
+              fill="#8F9BB3"
+              name="message-circle-outline"
+            />
+          </TouchableOpacity>
         </View>
       </View>
-    </TouchableOpacity>
+    </View>
   );
 };
 
