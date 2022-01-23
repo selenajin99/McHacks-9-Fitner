@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import firestore from '@react-native-firebase/firestore';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import {View, StyleSheet, FlatList} from 'react-native';
 import ProfileCard from '../components/ProfileCard';
 import auth from '@react-native-firebase/auth';
@@ -8,28 +8,31 @@ import {Input} from '@ui-kitten/components';
 import {useIsFocused} from '@react-navigation/native';
 
 const ExplorePage = ({navigation}) => {
+  const isMounted = useRef(false);
   const [value, setValue] = useState('');
   const [filteredusers, setFilteredusers] = useState([]);
   const [currentUserSports, setCurrentUserSports] = useState([]);
   const [currentUserTimes, setCurrentUserTimes] = useState([]);
 
   const getMatchedUsers = () => {
-    setFilteredusers([]);
-    firestore()
-      .collection('Users')
-      .get()
-      .then(docs => {
-        var tempUsers = [];
-        docs.forEach(doc => {
-          if (auth().currentUser.uid === doc.ref.id) {
-            setCurrentUserSports(doc._data.activities);
-            setCurrentUserTimes(doc._data.avalibilities);
-          } else {
-            tempUsers.push({...doc._data, id: doc.ref.id});
-          }
+    if (isMounted.current) {
+      setFilteredusers([]);
+      firestore()
+        .collection('Users')
+        .get()
+        .then(docs => {
+          var tempUsers = [];
+          docs.forEach(doc => {
+            if (auth().currentUser.uid === doc.ref.id) {
+              setCurrentUserSports(doc._data.activities);
+              setCurrentUserTimes(doc._data.avalibilities);
+            } else {
+              tempUsers.push({...doc._data, id: doc.ref.id});
+            }
+          });
+          setFilteredusers(tempUsers);
         });
-        setFilteredusers(tempUsers);
-      });
+    }
   };
 
   const isMatched = user => {
@@ -65,7 +68,9 @@ const ExplorePage = ({navigation}) => {
   };
 
   useEffect(() => {
+    isMounted.current = true;
     getMatchedUsers();
+    return () => (isMounted.current = false);
   }, [useIsFocused()]);
 
   return (

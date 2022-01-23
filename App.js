@@ -26,7 +26,7 @@ import ChatsListPage from './src/screens/ChatsListPage';
 import SignUpPage from './src/screens/SignUpPage';
 import LandingPage from './src/screens/LandingPage';
 import ChatPage from './src/screens/ChatPage';
-import {createStackNavigator} from '@react-navigation/stack';
+import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 
 const Stack = createStackNavigator();
 
@@ -64,6 +64,7 @@ const App = () => {
         <Stack.Screen name="ChatPage" component={ChatPage} />
         <Stack.Screen
           options={{
+            ...TransitionPresets.ModalPresentationIOS,
             headerRight: () => {
               return (
                 <TouchableOpacity
@@ -116,9 +117,9 @@ const App = () => {
               <Avatar
                 style={{
                   marginLeft: 20,
-                  marginBottom: 15,
-                  height: 50,
-                  width: 50,
+
+                  height: 25,
+                  width: 25,
                   backgroundColor: 'blue',
                 }}
                 source={{
