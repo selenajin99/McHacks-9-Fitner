@@ -1,10 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, FlatList, Keyboard, StyleSheet} from 'react-native';
+import {View, Text, Keyboard, StyleSheet, Dimensions} from 'react-native';
 import firestore, {firebase} from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import storage from '@react-native-firebase/storage';
+import {launchImageLibrary} from 'react-native-image-picker';
+
+import ImageResizer from 'react-native-image-resizer';
 import {
   Autocomplete,
   AutocompleteItem,
@@ -16,6 +17,7 @@ import {
   SelectItem,
   Tooltip,
   Avatar,
+  Icon,
 } from '@ui-kitten/components';
 
 import axios from 'axios';
@@ -23,7 +25,7 @@ import MapModal from '../components/MapModal';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 const baseUrl = 'https://maps.googleapis.com/maps/api/geocode/json?address=';
 
-const AccountPage = () => {
+const AccountPage = ({route, navigation}) => {
   useEffect(() => {
     firestore()
       .collection('Users')
@@ -44,6 +46,7 @@ const AccountPage = () => {
         setName(res.data().Name);
         setBio(res.data().bio);
         setCity(res.data().city);
+        setActivies(res.data().activities);
         axios({
           method: 'get',
           url: `${baseUrl}${
@@ -113,6 +116,7 @@ const AccountPage = () => {
     'Saturday',
     'Sunday',
   ];
+
   const presetActivities = [
     {title: 'Soccer'},
     {title: 'Basketball'},
@@ -148,7 +152,7 @@ const AccountPage = () => {
   );
   return (
     <>
-      <KeyboardAwareScrollView>
+      <KeyboardAwareScrollView style={{marginBottom: 20}}>
         <View
           style={{
             flex: 1,
@@ -156,23 +160,72 @@ const AccountPage = () => {
           <TouchableOpacity
             onPress={() => {
               launchImageLibrary().then(image => {
-                storage().ref(auth().currentUser.uid).putFile(image);
+                ImageResizer.createResizedImage(
+                  image.assets[0].uri,
+                  500,
+                  500,
+                  'PNG',
+                  500,
+                  0,
+                  image.assets[0].uri,
+                )
+                  .then(response => {
+                    let uri = response.uri;
+
+                    let imageName =
+                      'profile/' + auth().currentUser.uid + '.png';
+                    let uploadUri =
+                      Platform.OS === 'ios' ? uri.replace('file://', '') : uri;
+
+                    firebase
+                      .storage()
+                      .ref(imageName)
+                      .putFile(uploadUri)
+                      .then(snapshot => {
+                        //You can check the image is now uploaded in the storage bucket
+                        console.log(
+                          `${imageName} has been successfully uploaded.`,
+                        );
+
+                        firebase
+                          .storage()
+                          .ref(imageName)
+                          .getDownloadURL()
+                          .then(url => {
+                            route.params.setImageUri(url);
+                            firestore()
+                              .collection('Users')
+                              .doc(auth().currentUser.uid)
+                              .update({imageUri: url});
+                            navigation.pop();
+                          });
+                      })
+                      .catch(e => console.log('uploading image error => ', e));
+                  })
+                  .catch(err => {
+                    console.log('image resizing error => ', err);
+                  });
+                // storage()
+                //   .ref(auth().currentUser.uid)
+                //   .putFile(image.assets[0].uri)
+                //   .then(res => {
+                //     console.log(res);
+                //   })
+                //   .catch(e => {
+                //     console.log(e);
+                //   });
               });
             }}
             style={{
               top: 30,
-              width: 100,
+              width: Dimensions.get('window').width * 0.55,
+              height: Dimensions.get('window').width * 0.55,
               alignSelf: 'center',
-              height: 100,
             }}>
             <Avatar
-              style={{
-                top: 5,
-                width: 90,
-                height: 90,
-              }}
+              style={{width: '100%', height: '100%', borderRadius: 15}}
               source={{
-                uri: 'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png',
+                uri: route.params.imageUri,
               }}
             />
           </TouchableOpacity>
@@ -310,6 +363,7 @@ const AccountPage = () => {
             {activities.map((activity, index) => {
               return (
                 <TouchableOpacity
+                  style={styles.chip}
                   onPress={() => {
                     let newActivities = activities.filter(
                       item => item != activity,
@@ -319,15 +373,33 @@ const AccountPage = () => {
                       .collection('Users')
                       .doc(auth().currentUser.uid)
                       .update({activities: newActivities});
-                  }}>
-                  <Text style={styles.chip} key={index}>
-                    {activity} ❌
-                  </Text>
+                  }}
+                  key={index}>
+                  <Text style={{marginLeft: 20}}>{activity}</Text>
+                  <Icon
+                    style={{
+                      width: 15,
+                      height: 15,
+                      marginLeft: 5,
+
+                      backgroundColor: 'blue',
+                      fill: '#8F9BB3',
+                    }}
+                    name="trash-outline"
+                  />
                 </TouchableOpacity>
               );
             })}
           </View>
         </View>
+        <Button
+          status={'danger'}
+          style={{alignSelf: 'center'}}
+          onPress={() => {
+            auth().signOut();
+          }}>
+          Sign out
+        </Button>
       </KeyboardAwareScrollView>
       <MapModal
         setCity={setCity}
@@ -347,39 +419,20 @@ const AccountPage = () => {
             });
         }}
       />
-      <Button
-        status={'danger'}
-        style={{position: 'absolute', alignSelf: 'center', bottom: 10}}
-        onPress={() => {
-          auth().signOut();
-        }}>
-        Sign out
-      </Button>
     </>
   );
 };
 const styles = StyleSheet.create({
-  card: {
-    flexDirection: 'row',
-  },
-  profile: {
-    height: 120,
-    width: 120,
-  },
-  right: {
-    marginHorizontal: '5%',
-    marginVertical: '5%',
-  },
   chip: {
+    justifyContent: 'center',
+    alignContent: 'center',
+    flexDirection: 'row',
     borderRadius: 10,
     borderColor: ' black',
     borderWidth: 1,
     textAlign: 'center',
     paddingHorizontal: 15,
     marginHorizontal: 5,
-  },
-  sports: {
-    flexDirection: 'row',
   },
 });
 

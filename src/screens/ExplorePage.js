@@ -5,46 +5,70 @@ import {View, StyleSheet, FlatList} from 'react-native';
 import ProfileCard from '../components/ProfileCard';
 import auth from '@react-native-firebase/auth';
 import {Input} from '@ui-kitten/components';
+import {useIsFocused} from '@react-navigation/native';
 
-const ExplorePage = () => {
+const ExplorePage = ({navigation}) => {
   const [value, setValue] = useState('');
   const [filteredusers, setFilteredusers] = useState([]);
-  const users = firestore().collection('Users');
-
+  const [currentUserSports, setCurrentUserSports] = useState([]);
+  const [currentUserTimes, setCurrentUserTimes] = useState([]);
   const getMatchedUsers = () => {
+    setFilteredusers([]);
     firestore()
       .collection('Users')
       .get()
       .then(docs => {
         var tempUsers = [];
         docs.forEach(doc => {
-          tempUsers.push(doc._data);
+          if (auth().currentUser.uid === doc.ref.id) {
+            setCurrentUserSports(doc._data.activities);
+            setCurrentUserTimes(doc._data.avalibilities);
+          } else {
+            tempUsers.push({...doc._data, id: doc.ref.id});
+          }
         });
         setFilteredusers(tempUsers);
       });
   };
-  const search = () => {
-    const bob = firestore();
-    users.where('Name', 'array-contains', value).onSnapshot(snapshot => {
-      setFilteredusers(
-        snapshot.docs.map(doc => ({id: doc.id, data: doc.data()})),
-      );
-    });
-    return bob;
+
+  const isMatched = user => {
+    // check matched sports
+
+    if (
+      user.activities &&
+      user.activities.some(item => currentUserSports.includes(item))
+    ) {
+      return true;
+
+      // check avalibility
+    } else {
+      return false;
+    }
+  };
+
+  const search = nextValue => {
+    if (nextValue.length !== 0) {
+      // TODO implement search for sports function
+      firestore()
+        .collection('Users')
+        .where('Name', '>=', nextValue)
+        .where('Name', '<=', nextValue + '\uf8ff')
+        .get()
+        .then(docs => {
+          var tempUsers = [];
+          docs.forEach(doc => {
+            tempUsers.push(doc._data);
+          });
+          setFilteredusers(tempUsers);
+        });
+    } else {
+      getMatchedUsers();
+    }
   };
 
   useEffect(() => {
     getMatchedUsers();
-    //   firestore()
-    //     .collection('Users')
-    //     .doc(auth().currentUser.uid)
-    //     .get()
-    //     .then(doc => {
-    //       setUsername(doc.data().Name);
-    //     });
-    console.log('filtered shitt');
-    console.log(filteredusers);
-  }, []);
+  }, [useIsFocused()]);
 
   return (
     <View>
@@ -55,14 +79,31 @@ const ExplorePage = () => {
         value={value}
         onChangeText={nextValue => {
           setValue(nextValue);
-          search();
+          search(nextValue);
         }}
       />
       <FlatList
-        data={filteredusers}
+        style={{height: '100%'}}
+        onRefresh={getMatchedUsers}
+        refreshing={!filteredusers}
+        ListFooterComponent={() => {
+          return <View style={{margin: '10%'}}></View>;
+        }}
+        data={filteredusers.filter(item => {
+          if (isMatched(item)) return true;
+          else return false;
+        })}
         renderItem={item => {
           return (
-            <ProfileCard name={item.item.Name} sports={item.item.activities} />
+            <ProfileCard
+              navigation={navigation}
+              id={item.item.id}
+              imageUri={item.item.imageUri}
+              currSports={currentUserSports}
+              name={item.item.Name}
+              sports={item.item.activities}
+              bio={item.item.bio}
+            />
           );
         }}
       />

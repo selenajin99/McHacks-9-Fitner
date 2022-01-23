@@ -4,8 +4,11 @@ import React, {useEffect, useState} from 'react';
 import {StyleSheet, SafeAreaView} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
+import firestore, {firebase} from '@react-native-firebase/firestore';
+import storage from '@react-native-firebase/storage';
 import {
   ApplicationProvider,
+  Avatar,
   BottomNavigation,
   BottomNavigationTab,
   Icon,
@@ -20,6 +23,7 @@ import ChatsListPage from './src/screens/ChatsListPage';
 import FirstOpenPage from './src/screens/FirstOpenPage';
 import ChatPage from './src/screens/ChatPage';
 import {createStackNavigator} from '@react-navigation/stack';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const Stack = createStackNavigator();
 
@@ -27,50 +31,74 @@ const HeartIcon = props => <Icon {...props} name="heart" />;
 
 const {Navigator, Screen} = createBottomTabNavigator();
 
-const BottomTabBar = ({navigation, state}) => (
-  <SafeAreaView>
-    <BottomNavigation
-      selectedIndex={state.index}
-      onSelect={index => navigation.navigate(state.routeNames[index])}>
-      <BottomNavigationTab
-        title="Explore"
-        icon={<Icon name="search-outline"></Icon>}
-      />
-      <BottomNavigationTab
-        title="Chats"
-        icon={<Icon name="message-circle-outline"></Icon>}
-      />
-      <BottomNavigationTab
-        title="Account"
-        icon={<Icon name="person-outline"></Icon>}
-      />
-    </BottomNavigation>
-  </SafeAreaView>
-);
-
-const ChatListStack = () => {
-  return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="home"
-        component={TabNavigator}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen name="ChatPage" component={ChatPage} />
-    </Stack.Navigator>
-  );
-};
-
-const TabNavigator = () => (
-  <Navigator tabBar={props => <BottomTabBar {...props} />}>
-    <Screen name="Explore" component={ExplorePage} />
-    <Stack.Screen name="ChatList" component={ChatsListPage} />
-    <Screen name="Account" component={AccountPage} />
-  </Navigator>
-);
 const App = () => {
+  const BottomTabBar = ({navigation, state}) => (
+    <SafeAreaView>
+      <BottomNavigation
+        selectedIndex={state.index}
+        onSelect={index => navigation.navigate(state.routeNames[index])}>
+        <BottomNavigationTab
+          title="Explore"
+          icon={<Icon name="search-outline"></Icon>}
+        />
+        <BottomNavigationTab
+          title="Chats"
+          icon={<Icon name="message-circle-outline"></Icon>}
+        />
+        {/* <BottomNavigationTab
+          title="Account"
+          icon={<Icon name="person-outline"></Icon>}
+        /> */}
+      </BottomNavigation>
+    </SafeAreaView>
+  );
+  const ChatListStack = () => {
+    return (
+      <Stack.Navigator>
+        <Stack.Screen
+          name="home"
+          component={TabNavigator}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen name="ChatPage" component={ChatPage} />
+        <Stack.Screen name="Account" component={AccountPage} />
+      </Stack.Navigator>
+    );
+  };
+  const TabNavigator = ({navigation}) => (
+    <Navigator
+      screenOptions={{
+        headerLeft: () => {
+          return (
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('Account', {imageUri, setImageUri});
+              }}>
+              <Avatar
+                style={{
+                  marginLeft: 20,
+                  marginBottom: 15,
+                  height: 50,
+                  width: 50,
+                  backgroundColor: 'blue',
+                }}
+                source={{
+                  uri: imageUri,
+                }}
+              />
+            </TouchableOpacity>
+          );
+        },
+      }}
+      tabBar={props => <BottomTabBar {...props} />}>
+      <Screen name="Explore" component={ExplorePage} />
+      <Stack.Screen name="ChatList" component={ChatsListPage} />
+      {/* <Screen name="Account" component={AccountPage} /> */}
+    </Navigator>
+  );
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState();
+  const [imageUri, setImageUri] = useState('');
 
   function onAuthStateChanged(user) {
     setUser(user);
@@ -90,6 +118,14 @@ const App = () => {
       </ApplicationProvider>
     );
   }
+
+  firestore()
+    .collection('Users')
+    .doc(user.uid)
+    .get()
+    .then(doc => {
+      setImageUri(doc.data().imageUri);
+    });
   return (
     <>
       <IconRegistry icons={EvaIconsPack} />
