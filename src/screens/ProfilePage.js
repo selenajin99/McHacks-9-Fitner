@@ -291,6 +291,7 @@ const styles = StyleSheet.create({
   },
   categories: {
     fontSize: 20,
+    marginTop: '5%',
     marginBottom: 13,
     marginHorizontal: '6%',
     alignSelf: 'flex-start',
@@ -319,8 +320,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   tablecells: {
-    // flex: 1.5,
-    // alignSelf: 'stretch',
+    flex: 1.5,
+    alignSelf: 'stretch',
   },
   chat: {
     height: 32,
