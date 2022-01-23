@@ -12,16 +12,21 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
 } from 'react-native';
-import {Icon, Tooltip} from '@ui-kitten/components';
+import {Icon, Modal, Card, Button, Avatar} from '@ui-kitten/components';
 import firestore, {firebase} from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 const ChatPage = ({navigation, route}) => {
+  console.log('hi');
+
   console.log(route.params);
   const [input, setInput] = useState('');
   const [senderName, setSenderName] = useState('');
   const [messages, setMessages] = useState([]);
+  const [visible, setVisible] = useState(false);
+  const [memberNames, setMemberNames] = useState([]);
+  const [profilePicUri, setProfilePicUri] = useState([]);
 
   useEffect(() => {
     firestore()
@@ -31,6 +36,25 @@ const ChatPage = ({navigation, route}) => {
       .then(doc => {
         setSenderName(doc.data().Name);
       });
+
+    let temp = [];
+    let imgTmp = [];
+    route.params.members.forEach((member, index) => {
+      firestore()
+        .collection('Users')
+        .doc(member)
+        .get()
+        .then(doc => {
+          temp.push(doc.data().Name);
+          imgTmp.push(doc.data().imageUri);
+          if (index === route.params.members.length - 1) {
+            setMemberNames(temp);
+            console.log(temp);
+            setProfilePicUri(imgTmp);
+            console.log(imgTmp);
+          }
+        });
+    });
   }, []);
 
   useLayoutEffect(() => {
@@ -42,7 +66,13 @@ const ChatPage = ({navigation, route}) => {
             flexDirection: 'row',
             alignItems: 'center',
           }}>
-          <Text style={{fontSize: 20}}> {route.params.chatName}</Text>
+          <TouchableOpacity
+            activeOpacity={0.5}
+            onPress={() => {
+              setVisible(true);
+            }}>
+            <Text style={{fontSize: 20}}> {route.params.chatName}</Text>
+          </TouchableOpacity>
         </View>
       ),
       headerRight: () => {
@@ -56,8 +86,6 @@ const ChatPage = ({navigation, route}) => {
   }, [navigation]);
 
   const sendMessage = () => {
-    Keyboard.dismiss();
-
     firestore()
       .collection('Chats')
       .doc(route.params.id)
@@ -92,29 +120,86 @@ const ChatPage = ({navigation, route}) => {
         keyboardVerticalOffset={120}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <>
-            <KeyboardAwareScrollView ref={scrollViewRef}>
+            <KeyboardAwareScrollView
+              contentContainerStyle={{paddingBottom: 15, paddingTop: 15}}
+              ref={scrollViewRef}
+              onContentSizeChange={() =>
+                scrollViewRef.current.scrollToEnd({animated: true})
+              }>
               {messages.map(({id, data}) =>
                 data.sender !== senderName ? (
                   <View key={id} style={styles.reciever}>
-                    <Text style={styles.recieverText}>
-                      {data.sender}({data.timestamp.toDate().getHours()}:
-                      {data.timestamp.toDate().getMinutes()})- {data.message}
-                    </Text>
+                    <Avatar
+                      marginEnd={10}
+                      bottom={-15}
+                      left={-5}
+                      position="absolute"
+                      rounded
+                      style={{width: 30, height: 30}}
+                      source={{
+                        uri: profilePicUri[memberNames.indexOf(data.sender)],
+                      }}
+                    />
+                    <Text style={styles.recieverText}>{data.message}</Text>
+                    <Text style={styles.recieverName}>{data.sender}</Text>
                   </View>
                 ) : (
                   <View style={styles.sender}>
-                    <Text style={styles.senderText}>
-                      {data.sender}: {data.message}
-                    </Text>
+                    <Avatar
+                      marginEnd={10}
+                      bottom={-15}
+                      right={-15}
+                      position="absolute"
+                      rounded
+                      style={{width: 30, height: 30}}
+                      source={{
+                        uri: profilePicUri[memberNames.indexOf(data.sender)],
+                      }}
+                    />
+                    <Text style={styles.senderText}>{data.message}</Text>
+                    <Text style={styles.senderName}>me</Text>
                   </View>
                 ),
               )}
             </KeyboardAwareScrollView>
-
+            <Modal visible={visible}>
+              <Card disabled={true}>
+                <Text>Group Chat Members:</Text>
+                <ScrollView>
+                  {memberNames.map((member, index) => (
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                      }}>
+                      <Avatar
+                        rounded
+                        style={{
+                          width: 25,
+                          height: 25,
+                        }}
+                        source={{
+                          uri: profilePicUri[index],
+                        }}
+                      />
+                      <Text
+                        style={{
+                          flex: 1,
+                        }}>
+                        {member}
+                      </Text>
+                    </View>
+                  ))}
+                </ScrollView>
+                <Button size="tiny" onPress={() => setVisible(false)}>
+                  DISMISS
+                </Button>
+              </Card>
+            </Modal>
             <View style={styles.footer}>
               <TextInput
                 onFocus={() => {
-                  scrollViewRef.current.scrollToEnd({animated: false});
+                  scrollViewRef.current.scrollToEnd({animated: true});
                 }}
                 value={input}
                 onChangeText={text => setInput(text)}
@@ -162,15 +247,38 @@ const styles = StyleSheet.create({
     height: 24,
     color: 'blue',
   },
-  recieverText: {},
-  senderText: {},
+  recieverText: {
+    color: 'white',
+    fontWeight: '500',
+    marginLeft: 10,
+    marginBottom: 15,
+    fontSize: 15,
+  },
+  senderText: {
+    color: 'white',
+    fontWeight: '500',
+    marginLeft: 10,
+    fontSize: 15,
+
+    marginBottom: 15,
+  },
+  recieverName: {
+    alignSelf: 'flex-start',
+    fontSize: 10,
+    color: 'white',
+  },
+  senderName: {
+    alignSelf: 'flex-end',
+    fontSize: 10,
+    color: 'white',
+  },
   reciever: {
     padding: 15,
     backgroundColor: 'lightblue',
     alignSelf: 'flex-start',
     borderRadius: 30,
     marginLeft: 15,
-    marginBottom: 20,
+    marginBottom: 30,
     maxWidth: '80%',
     position: 'relative',
   },
@@ -180,7 +288,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     borderRadius: 30,
     marginRight: 15,
-    marginBottom: 20,
+    marginBottom: 30,
     maxWidth: '80%',
     position: 'relative',
   },

@@ -12,10 +12,30 @@ const ChatsListPage = ({navigation}) => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
+      headerStyle: {backgroundColor: 'lightblue'},
+      headerTitleStyle: {color: 'black'},
+      headerTintColor: 'black',
+      headerTitle: () => (
+        <View
+          style={{
+            position: 'absolute',
+            flexDirection: 'row',
+            alignItems: 'center',
+          }}>
+          <Text style={{fontSize: 25, fontWeight: 'bold'}}> Chat</Text>
+        </View>
+      ),
       headerRight: () => {
         return (
-          <View style={{flexDirection: 'row'}}>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              width: 80,
+              marginRight: 15,
+            }}>
             <TouchableOpacity
+              activeOpacity={0.5}
               onPress={() => {
                 setVisible(true);
                 // firestore()
@@ -28,12 +48,14 @@ const ChatsListPage = ({navigation}) => {
                 //   });
               }}>
               <Icon
-                style={{width: 32, height: 32}}
+                style={{width: 22, height: 22}}
                 fill="#8F9BB3"
                 name="people-outline"
               />
+              <Text style={{fontSize: 8, alignSelf: 'center'}}>Join</Text>
             </TouchableOpacity>
             <TouchableOpacity
+              activeOpacity={0.5}
               onPress={() => {
                 setNewGroupVisible(true);
                 // firestore()
@@ -50,10 +72,11 @@ const ChatsListPage = ({navigation}) => {
                 //   });
               }}>
               <Icon
-                style={{width: 32, height: 32}}
+                style={{width: 22, height: 22}}
                 fill="#8F9BB3"
                 name="plus"
               />
+              <Text style={{fontSize: 8, alignSelf: 'center'}}>Create</Text>
             </TouchableOpacity>
           </View>
         );
@@ -162,6 +185,7 @@ const ChatsListPage = ({navigation}) => {
               chatName={item.item.data.chatName}
               chatCode={item.item.data.chatCode}
               navigation={navigation}
+              members={item.item.data.members}
             />
           );
         }}
