@@ -9,7 +9,7 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 const LandingPage = ({navigation}) => {
   return (
     <SafeAreaView>
-      <View>
+      <ScrollView>
         <Text
           style={{
             fontWeight: 'bold',
@@ -38,7 +38,7 @@ const LandingPage = ({navigation}) => {
           style={styles.button}>
           GET STARTED
         </Button>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
