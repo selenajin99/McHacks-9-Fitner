@@ -251,7 +251,7 @@ const AccountPage = ({route, navigation}) => {
             label={'Bio'}
             value={bio}
             onChangeText={setBio}
-            style={{marginVertical: '10%'}}
+            style={{marginTop: '5%'}}
             multiline={true}
             onKeyDown={handleKeyDown}
             onSubmitEditing={newBio => {
@@ -269,6 +269,7 @@ const AccountPage = ({route, navigation}) => {
               showSoftInputOnFocus={false}
               keyboardType={null}
               label={'Location'}
+              style={{width: '100%', marginTop: '5%'}}
               value={city}
               onFocus={() => {
                 Keyboard.dismiss();
@@ -283,7 +284,7 @@ const AccountPage = ({route, navigation}) => {
             value={'Select activities here'}
             multiSelect={true}
             label={'Activities'}
-            style={{width: '100%', marginTop: '10%'}}
+            style={{width: '100%', marginTop: '5%'}}
             selectedIndex={selectedActivities}
             onSelect={index => {
               setSelectedActivities(index);
@@ -327,7 +328,7 @@ const AccountPage = ({route, navigation}) => {
 
           <Select
             value={displayValue}
-            style={{width: '100%', marginVertical: '10%'}}
+            style={{width: '100%', marginTop: '5%'}}
             label="Availability"
             multiSelect={true}
             selectedIndex={availability}

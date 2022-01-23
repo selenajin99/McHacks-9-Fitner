@@ -23,7 +23,8 @@ import ProfilePage from './src/screens/ProfilePage';
 import AccountPage from './src/screens/AccountPage';
 import ExplorePage from './src/screens/ExplorePage';
 import ChatsListPage from './src/screens/ChatsListPage';
-import FirstOpenPage from './src/screens/FirstOpenPage';
+import SignUpPage from './src/screens/SignUpPage';
+import LandingPage from './src/screens/LandingPage';
 import ChatPage from './src/screens/ChatPage';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 
@@ -86,6 +87,24 @@ const App = () => {
       </Stack.Navigator>
     );
   };
+
+  const LandingStack = () => {
+    return (
+      <Stack.Navigator>
+        <Stack.Screen
+          name="LandingPage"
+          component={LandingPage}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="SignUpPage"
+          component={SignUpPage}
+          options={{headerShown: false}}
+        />
+      </Stack.Navigator>
+    );
+  };
+
   const TabNavigator = ({navigation}) => (
     <Navigator
       screenOptions={{
@@ -137,7 +156,9 @@ const App = () => {
   if (!user) {
     return (
       <ApplicationProvider {...eva} theme={eva.light}>
-        <FirstOpenPage />
+        <NavigationContainer>
+          <LandingStack />
+        </NavigationContainer>
       </ApplicationProvider>
     );
   }
