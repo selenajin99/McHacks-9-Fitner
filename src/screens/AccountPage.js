@@ -377,29 +377,19 @@ const AccountPage = ({route, navigation}) => {
                   key={index}>
                   <Text style={{marginLeft: 20}}>{activity}</Text>
                   <Icon
+                    name="trash-outline"
                     style={{
                       width: 15,
                       height: 15,
                       marginLeft: 5,
-
-                      backgroundColor: 'blue',
                       fill: '#8F9BB3',
                     }}
-                    name="trash-outline"
                   />
                 </TouchableOpacity>
               );
             })}
           </View>
         </View>
-        <Button
-          status={'danger'}
-          style={{alignSelf: 'center'}}
-          onPress={() => {
-            auth().signOut();
-          }}>
-          Sign out
-        </Button>
       </KeyboardAwareScrollView>
       <MapModal
         setCity={setCity}

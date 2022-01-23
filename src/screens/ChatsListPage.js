@@ -4,7 +4,7 @@ import ChatLists from '../components/ChatLists';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import {Button, Card, Icon, Input, Modal, Text} from '@ui-kitten/components';
-
+console.disableYellowBox = true;
 const ChatsListPage = ({navigation}) => {
   const [chats, setChats] = useState([]);
   const [visible, setVisible] = useState(false);
@@ -16,12 +16,7 @@ const ChatsListPage = ({navigation}) => {
       headerTitleStyle: {color: 'black'},
       headerTintColor: 'black',
       headerTitle: () => (
-        <View
-          style={{
-            position: 'absolute',
-            flexDirection: 'row',
-            alignItems: 'center',
-          }}>
+        <View>
           <Text style={{fontSize: 25, fontWeight: 'bold'}}> Chat</Text>
         </View>
       ),

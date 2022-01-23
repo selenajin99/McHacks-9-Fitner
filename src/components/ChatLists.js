@@ -1,13 +1,7 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {
-  Avatar,
-  Button,
-  ListItem,
-  Divider,
-  KittyText,
-} from '@ui-kitten/components';
-import firestore, {firebase} from '@react-native-firebase/firestore';
+import {Avatar, Button, ListItem, Divider} from '@ui-kitten/components';
+import firestore from '@react-native-firebase/firestore';
 
 const ChatLists = ({id, chatName, navigation, chatCode, members}) => {
   const [chatMessages, setChatMessages] = useState([]);

@@ -13,6 +13,7 @@ import {
   BottomNavigationTab,
   Icon,
   IconRegistry,
+  Button,
 } from '@ui-kitten/components';
 import {EvaIconsPack} from '@ui-kitten/eva-icons';
 import * as eva from '@eva-design/eva';
@@ -36,7 +37,9 @@ const App = () => {
     <SafeAreaView>
       <BottomNavigation
         selectedIndex={state.index}
-        onSelect={index => navigation.navigate(state.routeNames[index])}>
+        onSelect={index => {
+          navigation.navigate(state.routeNames[index]);
+        }}>
         <BottomNavigationTab
           title="Explore"
           icon={<Icon name="search-outline"></Icon>}
@@ -45,10 +48,6 @@ const App = () => {
           title="Chats"
           icon={<Icon name="message-circle-outline"></Icon>}
         />
-        {/* <BottomNavigationTab
-          title="Account"
-          icon={<Icon name="person-outline"></Icon>}
-        /> */}
       </BottomNavigation>
     </SafeAreaView>
   );
@@ -61,7 +60,22 @@ const App = () => {
           options={{headerShown: false}}
         />
         <Stack.Screen name="ChatPage" component={ChatPage} />
-        <Stack.Screen name="Account" component={AccountPage} />
+        <Stack.Screen
+          options={{
+            headerRight: () => {
+              return (
+                <Button
+                  onPress={() => {
+                    auth().signOut();
+                  }}>
+                  Sign out
+                </Button>
+              );
+            },
+          }}
+          name="Account"
+          component={AccountPage}
+        />
       </Stack.Navigator>
     );
   };
@@ -98,7 +112,9 @@ const App = () => {
   );
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState();
-  const [imageUri, setImageUri] = useState('');
+  const [imageUri, setImageUri] = useState(
+    'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png',
+  );
 
   function onAuthStateChanged(user) {
     setUser(user);
@@ -138,17 +154,3 @@ const App = () => {
   );
 };
 export default App;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  text: {
-    textAlign: 'center',
-  },
-  likeButton: {
-    marginVertical: 16,
-  },
-});

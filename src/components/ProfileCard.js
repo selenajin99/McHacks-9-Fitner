@@ -69,6 +69,7 @@ const ProfileCard = props => {
                         id: doc.ref.id,
                         chatName: doc.data().chatName,
                         chatCode: doc.data().chatCode,
+                        members: [auth().currentUser.uid, props.id],
                       });
                       chatExists = true;
                     }
@@ -93,6 +94,7 @@ const ProfileCard = props => {
                             id: doc.id,
                             chatName: 'New group',
                             chatCode,
+                            members: [auth().currentUser.uid, props.id],
                           });
                         });
                     }

@@ -61,12 +61,7 @@ const ChatPage = ({navigation, route}) => {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: () => (
-        <View
-          style={{
-            position: 'absolute',
-            flexDirection: 'row',
-            alignItems: 'center',
-          }}>
+        <View>
           <TouchableOpacity
             activeOpacity={0.5}
             onPress={() => {
