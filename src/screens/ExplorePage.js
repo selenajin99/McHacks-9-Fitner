@@ -6,11 +6,12 @@ import ProfileCard from '../components/ProfileCard';
 import auth from '@react-native-firebase/auth';
 import {Input} from '@ui-kitten/components';
 
-const ExplorePage = () => {
+const ExplorePage = ({navigation}) => {
   const [value, setValue] = useState('');
   const [filteredusers, setFilteredusers] = useState([]);
   const [currentUserSports, setCurrentUserSports] = useState([]);
   const [currentUserTimes, setCurrentUserTimes] = useState([]);
+
   const getMatchedUsers = () => {
     firestore()
       .collection('Users')
@@ -36,14 +37,8 @@ const ExplorePage = () => {
       user.activities &&
       user.activities.some(item => currentUserSports.includes(item))
     ) {
-      console.log(' MATHCED');
-      console.log(user.activities);
       return true;
-
-      // check avalibility
     } else {
-      console.log('NOT MATHCED');
-      console.log(user.activities);
       return false;
     }
   };
@@ -95,11 +90,9 @@ const ExplorePage = () => {
         renderItem={item => {
           return (
             <ProfileCard
-              imageUri={item.item.imageUri}
+              navigation={navigation}
+              user={item.item}
               currSports={currentUserSports}
-              name={item.item.Name}
-              sports={item.item.activities}
-              bio={item.item.bio}
             />
           );
         }}
