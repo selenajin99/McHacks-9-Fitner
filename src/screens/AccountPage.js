@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect, useState} from 'react';
 import {View, Text, Keyboard, StyleSheet, Dimensions} from 'react-native';
 import firestore, {firebase} from '@react-native-firebase/firestore';

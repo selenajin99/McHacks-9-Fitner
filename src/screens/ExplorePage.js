@@ -12,6 +12,7 @@ const ExplorePage = ({navigation}) => {
   const [filteredusers, setFilteredusers] = useState([]);
   const [currentUserSports, setCurrentUserSports] = useState([]);
   const [currentUserTimes, setCurrentUserTimes] = useState([]);
+
   const getMatchedUsers = () => {
     setFilteredusers([]);
     firestore()
@@ -39,8 +40,6 @@ const ExplorePage = ({navigation}) => {
       user.activities.some(item => currentUserSports.includes(item))
     ) {
       return true;
-
-      // check avalibility
     } else {
       return false;
     }
@@ -97,12 +96,8 @@ const ExplorePage = ({navigation}) => {
           return (
             <ProfileCard
               navigation={navigation}
-              id={item.item.id}
-              imageUri={item.item.imageUri}
+              user={item.item}
               currSports={currentUserSports}
-              name={item.item.Name}
-              sports={item.item.activities}
-              bio={item.item.bio}
             />
           );
         }}

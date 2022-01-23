@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import 'react-native-gesture-handler';
 import auth from '@react-native-firebase/auth';
 import React, {useEffect, useState} from 'react';
@@ -76,6 +77,8 @@ const App = () => {
           name="Account"
           component={AccountPage}
         />
+        <Stack.Screen name="Account" component={AccountPage} />
+        <Stack.Screen name="ProfilePage" component={ProfilePage} />
       </Stack.Navigator>
     );
   };

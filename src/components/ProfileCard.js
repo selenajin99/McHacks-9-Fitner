@@ -1,5 +1,5 @@
 import React from 'react';
-import {Card, Text, Avatar, Icon} from '@ui-kitten/components';
+import {Text, Avatar, Icon} from '@ui-kitten/components';
 import {View, StyleSheet} from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
@@ -11,24 +11,24 @@ const ProfileCard = props => {
       <Avatar
         style={styles.profile}
         source={{
-          uri: props.imageUri,
+          uri: props.user.imageUri,
         }}
       />
       <View style={styles.right}>
-        <Text style={{fontSize: 30, marginBottom: 5}}>{props.name}</Text>
+        <Text style={{fontSize: 30, marginBottom: 5}}>{props.user.Name}</Text>
         <Text
           numberOfLines={3}
           ellipsizeMode="tail"
           style={{fontSize: 13, padding: 2}}>
-          {props.bio}
+          {props.user.bio}
         </Text>
         <View style={{flexDirection: 'row', bottom: 0, position: 'absolute'}}>
           <FlatList
             style={{height: 30}}
             horizontal={true}
             data={
-              props.sports
-                ? props.sports.filter(item => {
+              props.user.activities
+                ? props.user.activities.filter(item => {
                     if (props.currSports.includes(item)) {
                       return true;
                     } else {
