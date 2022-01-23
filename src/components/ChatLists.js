@@ -69,7 +69,10 @@ const ChatLists = ({id, chatName, navigation, chatCode, members}) => {
 
   const renderItemAccessory = props => (
     <Text style={{fontSize: 12}}>
-      {chatMessages?.[0]?.timestamp?.toDate().toLocaleTimeString()}
+      {chatMessages?.[0]?.timestamp?.toDate().toLocaleTimeString('en-US', {
+        hour: '2-digit',
+        minute: '2-digit',
+      })}
     </Text>
   );
 
