@@ -1,9 +1,17 @@
 import React, {useState, useEffect, useLayoutEffect} from 'react';
-import {FlatList, TouchableOpacity, View} from 'react-native';
+import {
+  FlatList,
+  TouchableOpacity,
+  View,
+  StyleSheet,
+  KeyboardAvoidingView,
+} from 'react-native';
 import ChatLists from '../components/ChatLists';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import {Button, Card, Icon, Input, Modal, Text} from '@ui-kitten/components';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+
 console.disableYellowBox = true;
 const ChatsListPage = ({navigation}) => {
   const [chats, setChats] = useState([]);
@@ -33,14 +41,6 @@ const ChatsListPage = ({navigation}) => {
               activeOpacity={0.5}
               onPress={() => {
                 setVisible(true);
-                // firestore()
-                //   .collection('Chats')
-                //   .where('chatCode', '==', '')
-                //   .doc.update({
-                //     members: firestore.FieldValue.arrayUnion(
-                //       auth().currentUser.uid,
-                //     ),
-                //   });
               }}>
               <Icon
                 style={{width: 22, height: 22}}
@@ -53,18 +53,6 @@ const ChatsListPage = ({navigation}) => {
               activeOpacity={0.5}
               onPress={() => {
                 setNewGroupVisible(true);
-                // firestore()
-                //   .collection('Chats')
-                //   .add({chatName: 'New group'})
-                //   .then(doc => {
-                //     doc.update({
-                //       chatCode: doc.id.substring(
-                //         doc.id.length - 4,
-                //         doc.id.length,
-                //       ),
-                //       members: [auth().currentUser.uid],
-                //     });
-                //   });
               }}>
               <Icon
                 style={{width: 22, height: 22}}
@@ -94,7 +82,11 @@ const ChatsListPage = ({navigation}) => {
 
   return (
     <>
-      <Modal visible={visible}>
+      <Modal
+        visible={visible}
+        onBackdropPress={() => {
+          setVisible(false), setChatCode('');
+        }}>
         <Card disabled={true}>
           <Text>Please enter the chat code you would like to join</Text>
           <Input
@@ -126,10 +118,13 @@ const ChatsListPage = ({navigation}) => {
               </TouchableOpacity>
             }
           />
-          {/* <Button onPress={() => setVisible(false)}>DISMISS</Button> */}
         </Card>
       </Modal>
-      <Modal visible={newGroupVisible}>
+      <Modal
+        visible={newGroupVisible}
+        onBackdropPress={() => {
+          setNewGroupVisible(false), setNewGroupName('');
+        }}>
         <Card disabled={true}>
           <Text>Please enter a group name</Text>
           <Input
@@ -161,32 +156,46 @@ const ChatsListPage = ({navigation}) => {
               </TouchableOpacity>
             }
           />
-          <Button
-            onPress={() => {
-              setNewGroupVisible(false);
-              setNewGroupName('');
-            }}>
-            DISMISS
-          </Button>
         </Card>
       </Modal>
       <FlatList
-        data={chats}
-        renderItem={item => {
+        contentContainerStyle={{flexGrow: 1}}
+        ListEmptyComponent={() => {
           return (
-            <ChatLists
-              key={item.index}
-              id={item.item.id}
-              chatName={item.item.data.chatName}
-              chatCode={item.item.data.chatCode}
-              navigation={navigation}
-              members={item.item.data.members}
-            />
+            <View style={styles.noChatView}>
+              <Text style={styles.noChat}>
+                Go explore to chat with new people!
+              </Text>
+            </View>
           );
         }}
+        data={chats}
+        renderItem={item => (
+          <ChatLists
+            key={item.index}
+            id={item.item.id}
+            chatName={item.item.data.chatName}
+            chatCode={item.item.data.chatCode}
+            navigation={navigation}
+            members={item.item.data.members}
+          />
+        )}
       />
     </>
   );
 };
 
 export default ChatsListPage;
+
+const styles = StyleSheet.create({
+  noChat: {
+    fontSize: 20,
+    textAlign: 'center',
+    margin: 10,
+  },
+  noChatView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});

@@ -173,14 +173,19 @@ const AccountPage = ({route, navigation}) => {
           <TouchableOpacity
             onPress={() => {
               launchImageLibrary().then(image => {
+                let imageFilename =
+                  Platform.OS === 'ios'
+                    ? image.assets[0].uri
+                    : image.assets[0].filename;
+                console.log(image);
                 ImageResizer.createResizedImage(
-                  image.assets[0].uri,
+                  imageFilename,
                   500,
                   500,
                   'PNG',
                   500,
                   0,
-                  image.assets[0].uri,
+                  imageFilename,
                 )
                   .then(response => {
                     let uri = response.uri;
@@ -189,7 +194,7 @@ const AccountPage = ({route, navigation}) => {
                       'profile/' + auth().currentUser.uid + '.png';
                     let uploadUri =
                       Platform.OS === 'ios' ? uri.replace('file://', '') : uri;
-
+                    console.log(uploadUri);
                     firebase
                       .storage()
                       .ref(imageName)

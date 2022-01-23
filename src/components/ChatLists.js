@@ -91,11 +91,17 @@ const ChatLists = ({id, chatName, navigation, chatCode, members}) => {
             {chatName}
           </Text>
         )}
-        description={evaProps => (
-          <Text style={{color: 'black', fontSize: 10, marginLeft: 12}}>
-            {chatMessages?.[0]?.sender}: {chatMessages?.[0]?.message}
-          </Text>
-        )}
+        description={evaProps => {
+          if (chatMessages?.[0]?.message != null) {
+            return (
+              <Text style={{color: 'black', fontSize: 10, marginLeft: 12}}>
+                {chatMessages?.[0]?.sender}: {chatMessages?.[0]?.message}
+              </Text>
+            );
+          } else {
+            return null;
+          }
+        }}
         accessoryLeft={ItemImage}
         accessoryRight={renderItemAccessory}
         onPress={() =>
@@ -113,5 +119,3 @@ const ChatLists = ({id, chatName, navigation, chatCode, members}) => {
 };
 
 export default ChatLists;
-
-const styles = StyleSheet.create({});
