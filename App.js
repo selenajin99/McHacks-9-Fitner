@@ -77,7 +77,7 @@ const App = () => {
           name="Account"
           component={AccountPage}
         />
-        <Stack.Screen name="Account" component={AccountPage} />
+
         <Stack.Screen name="ProfilePage" component={ProfilePage} />
       </Stack.Navigator>
     );
