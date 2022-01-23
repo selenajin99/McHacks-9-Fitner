@@ -27,6 +27,7 @@ import SignUpPage from './src/screens/SignUpPage';
 import LandingPage from './src/screens/LandingPage';
 import ChatPage from './src/screens/ChatPage';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
+import ChatDetailsPage from './src/screens/ChatDetailsPage';
 
 const Stack = createStackNavigator();
 
@@ -82,7 +83,7 @@ const App = () => {
           name="Account"
           component={AccountPage}
         />
-
+        <Stack.Screen name="ChatDetailsPage" component={ChatDetailsPage} />
         <Stack.Screen name="ProfilePage" component={ProfilePage} />
       </Stack.Navigator>
     );
@@ -117,7 +118,6 @@ const App = () => {
               <Avatar
                 style={{
                   marginLeft: 20,
-
                   height: 25,
                   width: 25,
                   backgroundColor: 'blue',

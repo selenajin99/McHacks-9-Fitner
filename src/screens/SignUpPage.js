@@ -15,7 +15,7 @@ import {
   Tooltip,
 } from '@ui-kitten/components';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import firestore from '@react-native-firebase/firestore';
+import firestore, {firebase} from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import {launchImageLibrary} from 'react-native-image-picker';
 import axios from 'axios';
@@ -27,10 +27,7 @@ const latitudeDelta = 0.025;
 const longitudeDelta = 0.025;
 
 const SignUpPage = () => {
-  const [selectedActivities, setSelectedActivities] = React.useState([
-    new IndexPath(0),
-    new IndexPath(1),
-  ]);
+  const [selectedActivities, setSelectedActivities] = React.useState([]);
   const [name, setName] = useState('');
   const [imageUri, setImageUri] = useState(
     'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png',
@@ -165,6 +162,7 @@ const SignUpPage = () => {
             style={{width: '100%', marginTop: '5%'}}
             selectedIndex={selectedActivities}
             onSelect={index => {
+              console.log(index);
               setSelectedActivities(index);
               let tempArray = [];
               index.forEach(item => {
@@ -195,7 +193,6 @@ const SignUpPage = () => {
             <SelectItem title="Bowling" />
             <SelectItem title="Boxing" />
           </Select>
-
           <Select
             value={displayValue}
             style={{width: '100%', marginTop: '5%'}}
@@ -204,7 +201,6 @@ const SignUpPage = () => {
             selectedIndex={availability}
             onSelect={index => {
               setAvailability(index);
-              console.log(index);
             }}>
             {TimesOfDay(days[0])}
             {TimesOfDay(days[1])}
@@ -239,6 +235,11 @@ const SignUpPage = () => {
                 availability.forEach(item => {
                   firestoreFormatted[days[item.section]][item.row] = true;
                 });
+                let firebaseActivities = [];
+                selectedActivities.forEach(activity => {
+                  firebaseActivities.push(presetActivities[activity.row]);
+                });
+                console.log(firebaseActivities);
                 firestore().collection('Users').doc(user.user.uid).set({
                   Name: name,
                   dateCreated: firestore.Timestamp.now(),
@@ -247,7 +248,7 @@ const SignUpPage = () => {
                   lastOpen: firestore.Timestamp.now(),
                   chats: [],
                   availability: firestoreFormatted,
-                  activities: selectedActivities,
+                  activities: firebaseActivities,
                   imageUri:
                     'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png',
                 });

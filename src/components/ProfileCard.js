@@ -86,21 +86,21 @@ const ProfileCard = props => {
                         console.log('creating');
                         firestore()
                           .collection('Chats')
-                          .add({chatName: 'New group'})
+                          .add({chatName: 'Chat with ' + props.user.Name})
                           .then(doc => {
                             let chatCode = doc.id.substring(
                               doc.id.length - 4,
                               doc.id.length,
                             );
-                            console.log('hi');
+
                             doc.update({
                               chatCode,
                               members: [auth().currentUser.uid, props.user.id],
                             });
-                            console.log('ehe');
+
                             props.navigation.navigate('ChatPage', {
                               id: doc.id,
-                              chatName: 'New group',
+                              chatName: 'Chat with ' + props.user.Name,
                               chatCode,
                               members: [auth().currentUser.uid, props.user.id],
                             });
@@ -114,7 +114,7 @@ const ProfileCard = props => {
                         console.log('creating');
                         firestore()
                           .collection('Chats')
-                          .add({chatName: 'New group'})
+                          .add({chatName: 'Chat with ' + props.user.Name})
                           .then(doc => {
                             let chatCode = doc.id.substring(
                               doc.id.length - 4,
@@ -126,7 +126,7 @@ const ProfileCard = props => {
                             });
                             props.navigation.navigate('ChatPage', {
                               id: doc.id,
-                              chatName: 'New group',
+                              chatName: 'Chat with ' + props.user.Name,
                               chatCode,
                               members: [auth().currentUser.uid, props.id],
                             });

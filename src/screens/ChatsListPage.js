@@ -126,7 +126,7 @@ const ChatsListPage = ({navigation}) => {
               </TouchableOpacity>
             }
           />
-          <Button onPress={() => setVisible(false)}>DISMISS</Button>
+          {/* <Button onPress={() => setVisible(false)}>DISMISS</Button> */}
         </Card>
       </Modal>
       <Modal visible={newGroupVisible}>

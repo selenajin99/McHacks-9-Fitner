@@ -6,14 +6,13 @@ import {
   SafeAreaView,
   Platform,
   StyleSheet,
-  ScrollView,
   TextInput,
   TouchableOpacity,
   KeyboardAvoidingView,
   Keyboard,
   TouchableWithoutFeedback,
 } from 'react-native';
-import {Icon, Modal, Card, Button, Avatar} from '@ui-kitten/components';
+import {Icon, Avatar} from '@ui-kitten/components';
 import firestore, {firebase} from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
@@ -22,7 +21,6 @@ const ChatPage = ({navigation, route}) => {
   const [input, setInput] = useState('');
   const [senderName, setSenderName] = useState('');
   const [messages, setMessages] = useState([]);
-  const [visible, setVisible] = useState(false);
   const [memberNames, setMemberNames] = useState([]);
   const [profilePicUri, setProfilePicUri] = useState([]);
 
@@ -71,7 +69,11 @@ const ChatPage = ({navigation, route}) => {
           <TouchableOpacity
             activeOpacity={0.5}
             onPress={() => {
-              setVisible(true);
+              navigation.push('ChatDetailsPage', {
+                members: route.params.members,
+                memberNames,
+                profilePicUri,
+              });
             }}>
             <Text style={{fontSize: 20}}> {route.params.chatName}</Text>
           </TouchableOpacity>
@@ -151,40 +153,7 @@ const ChatPage = ({navigation, route}) => {
                 ),
               )}
             </KeyboardAwareScrollView>
-            <Modal visible={visible}>
-              <Card disabled={true}>
-                <Text>Group Chat Members:</Text>
-                <ScrollView>
-                  {memberNames.map((member, index) => (
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                      }}>
-                      <Avatar
-                        rounded
-                        style={{
-                          width: 25,
-                          height: 25,
-                        }}
-                        source={{
-                          uri: profilePicUri[index],
-                        }}
-                      />
-                      <Text
-                        style={{
-                          flex: 1,
-                        }}>
-                        {member}
-                      </Text>
-                    </View>
-                  ))}
-                </ScrollView>
-                <Button size="tiny" onPress={() => setVisible(false)}>
-                  DISMISS
-                </Button>
-              </Card>
-            </Modal>
+
             <View style={styles.footer}>
               <TextInput
                 onFocus={() => {
