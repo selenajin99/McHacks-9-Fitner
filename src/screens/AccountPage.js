@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect, useState} from 'react';
-import {View, Text, Keyboard, StyleSheet, Dimensions} from 'react-native';
+import {View, Keyboard, Dimensions} from 'react-native';
 import firestore, {firebase} from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
@@ -129,6 +129,11 @@ const AccountPage = ({route, navigation}) => {
   ];
 
   const presetActivities = [
+    'Rock Climbing',
+    'Rugby',
+    'Golf',
+    'Yoga',
+    'Gym',
     'Soccer',
     'Basketball',
     'Baseball',
@@ -306,6 +311,10 @@ const AccountPage = ({route, navigation}) => {
                   console.log('done');
                 });
             }}>
+            <SelectItem title="Rock Climbing" />
+            <SelectItem title="Rugby" />
+            <SelectItem title="Yoga" />
+            <SelectItem title="Gym" />
             <SelectItem title="Soccer" />
             <SelectItem title="Basketball" />
             <SelectItem title="Baseball" />

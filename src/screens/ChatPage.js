@@ -23,7 +23,8 @@ const ChatPage = ({navigation, route}) => {
   const [messages, setMessages] = useState([]);
   const [memberNames, setMemberNames] = useState([]);
   const [profilePicUri, setProfilePicUri] = useState([]);
-
+  let memberNamesLocal = [];
+  let memberPicsLocal = [];
   useEffect(() => {
     firestore()
       .collection('Users')
@@ -45,8 +46,10 @@ const ChatPage = ({navigation, route}) => {
           imgTmp.push(doc.data().imageUri);
           if (index === route.params.members.length - 1) {
             setMemberNames(temp);
-            console.log(temp);
+            memberNamesLocal = temp;
+
             setProfilePicUri(imgTmp);
+            memberPicsLocal = imgTmp;
             console.log(imgTmp);
           }
         });
@@ -69,10 +72,13 @@ const ChatPage = ({navigation, route}) => {
           <TouchableOpacity
             activeOpacity={0.5}
             onPress={() => {
+              console.log(memberNames);
               navigation.push('ChatDetailsPage', {
                 members: route.params.members,
-                memberNames,
-                profilePicUri,
+                memberNames: memberNamesLocal,
+                profilePicUri: memberPicsLocal,
+                chatName: route.params.chatName,
+                id: route.params.id,
               });
             }}>
             <Text style={{fontSize: 20}}> {route.params.chatName}</Text>

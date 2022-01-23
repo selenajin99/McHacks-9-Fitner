@@ -82,6 +82,11 @@ const SignUpPage = () => {
   ];
 
   const presetActivities = [
+    'Rock Climbing',
+    'Rugby',
+    'Golf',
+    'Yoga',
+    'Gym',
     'Soccer',
     'Basketball',
     'Baseball',
@@ -169,6 +174,10 @@ const SignUpPage = () => {
                 tempArray.push(presetActivities[item.row]);
               });
             }}>
+            <SelectItem title="Rock Climbing" />
+            <SelectItem title="Rugby" />
+            <SelectItem title="Yoga" />
+            <SelectItem title="Gym" />
             <SelectItem title="Soccer" />
             <SelectItem title="Basketball" />
             <SelectItem title="Baseball" />
