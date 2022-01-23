@@ -1,12 +1,6 @@
 import React from 'react';
-import {Text, Avatar, Layout} from '@ui-kitten/components';
-import {
-  View,
-  StyleSheet,
-  FlatList,
-  ScrollView,
-  TouchableOpacity,
-} from 'react-native';
+import {Text, Avatar} from '@ui-kitten/components';
+import {View, StyleSheet, ScrollView} from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 

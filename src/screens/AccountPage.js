@@ -42,6 +42,9 @@ const AccountPage = ({route, navigation}) => {
         }
         let tempArray = [];
         res.data().activities.forEach(activity => {
+          console.log(
+            'pushing ' + activity + ' ' + presetActivities.indexOf(activity),
+          );
           tempArray.push(new IndexPath(presetActivities.indexOf(activity)));
         });
 
@@ -49,6 +52,7 @@ const AccountPage = ({route, navigation}) => {
         setName(res.data().Name);
         setBio(res.data().bio);
         setCity(res.data().city);
+        setSelectedActivities(tempArray);
 
         axios({
           method: 'get',
@@ -205,15 +209,6 @@ const AccountPage = ({route, navigation}) => {
                   .catch(err => {
                     console.log('image resizing error => ', err);
                   });
-                // storage()
-                //   .ref(auth().currentUser.uid)
-                //   .putFile(image.assets[0].uri)
-                //   .then(res => {
-                //     console.log(res);
-                //   })
-                //   .catch(e => {
-                //     console.log(e);
-                //   });
               });
             }}
             style={{
@@ -223,7 +218,7 @@ const AccountPage = ({route, navigation}) => {
               alignSelf: 'center',
             }}>
             <Avatar
-              style={{width: '100%', height: '100%', borderRadius: 15}}
+              style={{width: '100%', height: '100%', borderRadius: 360}}
               source={{
                 uri: route.params.imageUri,
               }}
