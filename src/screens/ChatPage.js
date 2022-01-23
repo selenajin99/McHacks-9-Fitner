@@ -117,36 +117,40 @@ const ChatPage = ({navigation, route}) => {
               }>
               {messages.map(({id, data}) =>
                 data.sender !== senderName ? (
-                  <View key={id} style={styles.reciever}>
+                  <View>
                     <Avatar
                       marginEnd={10}
-                      bottom={-15}
-                      left={-5}
-                      position="absolute"
+                      bottom={-55}
+                      right={-17}
+                      position="relative"
                       rounded
-                      style={{width: 30, height: 30}}
+                      style={{width: 30, height: 30, alignSelf: 'flex-start'}}
                       source={{
                         uri: profilePicUri[memberNames.indexOf(data.sender)],
                       }}
                     />
-                    <Text style={styles.recieverText}>{data.message}</Text>
-                    <Text style={styles.recieverName}>{data.sender}</Text>
+                    <View key={id} style={styles.reciever}>
+                      <Text style={styles.recieverText}>{data.message}</Text>
+                      <Text style={styles.recieverName}>{data.sender}</Text>
+                    </View>
                   </View>
                 ) : (
-                  <View style={styles.sender}>
+                  <View>
                     <Avatar
                       marginEnd={10}
-                      bottom={-15}
-                      right={-15}
-                      position="absolute"
+                      bottom={-55}
+                      left={-5}
+                      position="relative"
                       rounded
-                      style={{width: 30, height: 30}}
+                      style={{width: 30, height: 30, alignSelf: 'flex-end'}}
                       source={{
                         uri: profilePicUri[memberNames.indexOf(data.sender)],
                       }}
                     />
-                    <Text style={styles.senderText}>{data.message}</Text>
-                    <Text style={styles.senderName}>me</Text>
+                    <View key={id} style={styles.sender}>
+                      <Text style={styles.senderText}>{data.message}</Text>
+                      <Text style={styles.senderName}>me</Text>
+                    </View>
                   </View>
                 ),
               )}
@@ -214,7 +218,8 @@ const ChatPage = ({navigation, route}) => {
 export default ChatPage;
 
 const styles = StyleSheet.create({
-  container: {flex: 1},
+  container: {flex: 1, backgroundColor: '#e8e8e8'},
+
   footer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -237,48 +242,57 @@ const styles = StyleSheet.create({
     color: 'blue',
   },
   recieverText: {
-    color: 'white',
+    color: 'black',
     fontWeight: '500',
-    marginLeft: 10,
-    marginBottom: 15,
+    marginHorizontal: 10,
+    marginVertical: 0,
     fontSize: 15,
   },
   senderText: {
-    color: 'white',
+    color: 'black',
     fontWeight: '500',
-    marginLeft: 10,
+    marginHorizontal: 10,
     fontSize: 15,
-
-    marginBottom: 15,
+    marginVertical: 0,
   },
   recieverName: {
     alignSelf: 'flex-start',
-    fontSize: 10,
-    color: 'white',
+    fontSize: 12,
+    color: 'black',
+    marginLeft: 9,
+    position: 'relative',
+    top: -52,
+    left: 0,
   },
   senderName: {
     alignSelf: 'flex-end',
-    fontSize: 10,
-    color: 'white',
+    fontSize: 12,
+    color: 'black',
+    marginRight: 8,
+    position: 'relative',
+    top: -52,
+    right: 0,
   },
   reciever: {
     padding: 15,
-    backgroundColor: 'lightblue',
+    backgroundColor: '#b0b0b0',
     alignSelf: 'flex-start',
     borderRadius: 30,
-    marginLeft: 15,
+    marginLeft: 50,
     marginBottom: 30,
-    maxWidth: '80%',
+    maxWidth: '90%',
     position: 'relative',
+    maxHeight: 55,
   },
   sender: {
     padding: 15,
-    backgroundColor: 'lightgreen',
+    backgroundColor: '#1982FC',
     alignSelf: 'flex-end',
     borderRadius: 30,
-    marginRight: 15,
+    marginRight: 50,
     marginBottom: 30,
-    maxWidth: '80%',
+    maxWidth: '90%',
     position: 'relative',
+    maxHeight: 55,
   },
 });
