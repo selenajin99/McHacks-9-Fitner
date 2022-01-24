@@ -1,5 +1,6 @@
 # Fitner
 
+### Devpost submission: https://devpost.com/software/fitner
 During the COVID-19 pandemic, time spent at home, time spent not exercising, and time spent alone has been at an all time high. This is why, we decided to introduce FITNER to the other fitness nerds like ourselves who struggle to find others to participate in exercise with. As we all know that it is easier to stay healthy, and happy with friends.
 
 We created Fitner as a way to help you find friends to go hiking with, play tennis or even go bowling with! It can be difficult to practice the sport that you love when none of your existing friends are interested, and you do not have the time commitment to join a club. Fitner solves this issue by bridging the gap between fitness nerds who want to reach their potential but don't have the community to do so.
